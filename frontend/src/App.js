@@ -1,23 +1,49 @@
 import logo from './logo.svg';
+
+import {Routes, Route, NavLink} from "react-router-dom";
+
 import './App.css';
+
+const Home = props => {
+
+  return (
+      <div>
+        Home - init
+      </div>
+  )
+}
+
+const Temp = props => {
+
+  return (
+      <div>
+        Temp - init
+      </div>
+  )
+}
+
+const NotFound = props => {
+
+  return (
+      <div style={{fontSize: '2rem', color: 'red'}}>
+        NotFound
+      </div>
+  )
+}
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <nav>
+        <NavLink to={'/'} >Home</NavLink>
+        <NavLink to={'/temp'} >Temp</NavLink>
+      </nav>
+      <Routes>
+        <Route path='/' element={<Home/>}/>
+        <Route path='/temp' element={<Temp/>}/>
+        <Route path={'*'} element={<NotFound/>} />
+      </Routes>
+
     </div>
   );
 }
