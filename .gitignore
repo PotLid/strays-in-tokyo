@@ -50,6 +50,9 @@
 .*
 ~*
 
+# ignore config.py
+config.py
+
 # ignore node/grunt dependency directories
 node_modules/
 
