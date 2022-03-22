@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel=stylesheet type=text/css href="{{ url_for('static', filename='Login.css') }}">
+        <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Luckiest+Guy&family=Oswald:wght@700&family=Poppins&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <section>
+            <header>
+                <h1 class = "team"> Team Strays in Tokyo </h1>
+                
+                <ul>
+                    <a button class = "buttonlogin" href = "{{ url_for('login') }}" >Log in</button></a>
+
+                    <a button class = "buttonregister" href = "{{ url_for('register') }}" >Register</button></a>
+
+                    <a button class = "buttonabout" href = "{{ url_for('homepage') }}" >About</button></a>
+
+                    <a button class = "buttonhome" href = "{{ url_for('homepage') }}" >Home</button></a>
+                </ul>
+            </header>
+
+            <img src = "{{url_for('static', filename='stars.png')}}" id = "stars">
+            <img src = "{{url_for('static', filename='moon.png')}}" id = "moon">
+            <img src = "{{url_for('static', filename='mountains_behind.png')}}" id = "mountains_behind">
+            <img src = "{{url_for('static', filename='mountains_front.png')}}" id = "mountains_front">
+
+            <form>
+                <h1 class = "formtitle">Ready to Log in?</h1>
+
+                <p class = "formdescription">You're almost there!</p><br><br>
+                
+
+                <div class = "formgroup">
+                    <input type = "text" id = "email" class = "forminput" name = "email" placeholder = " " autocomplete = "off">
+                    <label for = "email" class = "formlabel">Email</label>
+                </div>
+
+
+                <div class = "formgroup">
+                    <input type = "password" id = "password" class = "forminput" name = "password" placeholder = " ">
+                    <label for = "password" class = "formlabel">Password</label>
+                </div>
+
+
+                <button class = "formbutton">Sign in</button>
+
+            </form>
+        </section>
+    </body>
+</html>
