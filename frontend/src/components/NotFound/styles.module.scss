@@ -1,0 +1,6 @@
+@use '../../App';
+
+.view-not-found {
+  @include App.app-body;
+  background: linear-gradient(#2b1055, #7597de);
+}

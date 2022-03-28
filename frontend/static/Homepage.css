@@ -48,7 +48,7 @@ header .buttonhome {
     margin-bottom: 1rem;
     margin-top: 0.5rem;
     padding: 0.75rem 2rem;
-    
+
     font-weight: 700;
     font-size: 120%;
     color: #2b1055;
@@ -87,7 +87,7 @@ header .buttonregister {
     margin-bottom: 1rem;
     margin-top: 0.5rem;
     padding: 0.75rem 2rem;
-    
+
     font-weight: 700;
     font-size: 120%;
     color: #ffffff;
@@ -135,8 +135,8 @@ header .buttonlogin {
     outline: none;
     border: none;
     cursor: pointer;
-    -webkit-transition: background-color 200ms ease in;
-    transition: background-color 200ms ease in;
+    -webkit-transition: background-color 200ms ease-in;
+    transition: background-color 200ms ease-in;
 }
 
 header .buttonlogin:hover {

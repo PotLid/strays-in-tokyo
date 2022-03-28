@@ -1,0 +1,6 @@
+@use '../../App';
+
+.view-home {
+  @include App.app-body;
+  background: linear-gradient(#2b1055, #7597de);
+}
