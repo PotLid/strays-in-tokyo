@@ -116,3 +116,4 @@ Thumbs.db
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # --------------
+.env
