@@ -5,8 +5,16 @@
   top: 0;
   left: 0;
   display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.header-wrap {
+  display: flex;
+  width: 100%;
   justify-content: space-between;
   align-items: center;
+  max-width: App.$desktop_max;
   padding: 0 1.25rem;
 }
 

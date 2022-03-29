@@ -20,15 +20,16 @@ function Header(props) {
 
     return (
         <header className={styles['app-header']}>
-            <h1 className={styles['header-logo']}> Team Strays in Tokyo </h1>
-            <nav className={styles['header-nav']}>
-                <ul className={styles['header-ul']}>
-                    <li className={styles['header-li']}><CustomLink to={URL_HOME}>HOME</CustomLink></li>
-                    <li className={styles['header-li']}><CustomLink to={URL_LOGIN}>LOGIN</CustomLink></li>
-                    <li className={styles['header-li']}><CustomLink to={URL_ABOUT}>ABOUT</CustomLink></li>
-                </ul>
-            </nav>
-
+            <div className={styles['header-wrap']}>
+                <h1 className={styles['header-logo']}> Team Strays in Tokyo </h1>
+                <nav className={styles['header-nav']}>
+                    <ul className={styles['header-ul']}>
+                        <li className={styles['header-li']}><CustomLink to={URL_HOME}>HOME</CustomLink></li>
+                        <li className={styles['header-li']}><CustomLink to={URL_LOGIN}>LOGIN</CustomLink></li>
+                        <li className={styles['header-li']}><CustomLink to={URL_ABOUT}>ABOUT</CustomLink></li>
+                    </ul>
+                </nav>
+            </div>
         </header>
     )
 }

@@ -5,7 +5,7 @@ import styles from './styles.module.scss';
 function Login(props) {
     return (
         <section className={styles['view-login']}>
-            Login
+            <h1>Hihi</h1>
         </section>
     )
 }
