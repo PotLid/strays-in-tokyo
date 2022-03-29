@@ -2,10 +2,10 @@ import React from 'react';
 
 import styles from './styles.module.scss';
 
-import stars from '../../imgs/stars.png';
-import moon from '../../imgs/moon.png';
-import mt_behind from '../../imgs/mountains_behind.png';
-import mt_front from '../../imgs/mountains_front.png';
+import stars from '../../imgs/stars.svg';
+import moon from '../../imgs/moon.svg';
+import mt_behind from '../../imgs/mountains_behind.svg';
+import mt_front from '../../imgs/mountains_front.svg';
 
 function Background(props) {
 

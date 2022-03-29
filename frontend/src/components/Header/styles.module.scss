@@ -15,7 +15,8 @@
   justify-content: space-between;
   align-items: center;
   max-width: App.$desktop_max;
-  padding: 0 1.25rem;
+  min-width: App.$desktop_min;
+  //padding: 0 1.25rem;
 }
 
 .header-logo {

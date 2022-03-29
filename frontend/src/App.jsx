@@ -1,4 +1,4 @@
-import {Routes, Route, NavLink} from "react-router-dom";
+import {Routes, Route} from "react-router-dom";
 
 import {URL_HOME, URL_LOGIN, URL_ABOUT} from './app/const';
 
