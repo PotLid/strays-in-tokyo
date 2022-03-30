@@ -18,3 +18,30 @@ body {
 #app-root {
     height: 100%;
 }
+  
+/* Custom Scrollbar 
+   ========================================================================== 
+*/
+
+::-webkit-scrollbar {
+    width: 13px; /* Vertical */
+    height: 13px; /* Horizontal */
+}
+
+::-webkit-scrollbar-track {
+    background: #1a0620;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 20px;
+    background: #310d3f;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    border-radius: 20px;
+    background: #490c61;
+}
+
+::-webkit-scrollbar-corner {
+    background-color: transparent;
+}

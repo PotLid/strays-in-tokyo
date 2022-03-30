@@ -25,7 +25,7 @@ function LoginForm({setSignUp}) {
             </div>
 
             <input className={styles['form-btn']} type={'submit'} value={'Sign in'} /><br/>
-            <button onClick={custom_clk}>Do you need to sign up for the account?</button>
+            <button onClick={custom_clk}>Need an account? Click here!</button>
         </form>
     )
 }
@@ -58,7 +58,7 @@ const SignUpForm = ({setLogin}) => {
             </div>
 
             <input className={styles['form-btn']} type={'submit'} value={'Sign up'} /><br/>
-            <button onClick={custom_clk}>Go back to the login.</button>
+            <button onClick={custom_clk}>Back to login</button>
         </form>
     )
 }

@@ -6,7 +6,6 @@ function Home(props) {
 
     return (
         <section className={styles['view-home']}>
-            Home
         </section>
     )
 }

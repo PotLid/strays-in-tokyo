@@ -6,7 +6,6 @@ function About(props) {
 
     return (
         <section className={styles['view-about']}>
-            About
         </section>
     )
 }
