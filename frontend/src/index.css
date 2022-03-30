@@ -13,14 +13,16 @@ html {
 body {
     position: relative;
     height: 100vh;
+    /* prevent horizontal scrolling */
+    overflow-x: hidden;
 }
 
 #app-root {
     height: 100%;
 }
-  
-/* Custom Scrollbar 
-   ========================================================================== 
+
+/* Custom Scrollbar
+   ==========================================================================
 */
 
 ::-webkit-scrollbar {
