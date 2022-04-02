@@ -12,7 +12,6 @@ COPY . .
 
 # Download dependencies
 RUN pip3 install -r requirements.txt
-RUN pip3 install pymongo
 
 # Allow port 8000 to be accessed from outside the container
 EXPOSE 8000
