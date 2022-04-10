@@ -1,9 +1,48 @@
 def request(path):
   
+  ## Obj 4: RESTful API 1
   
+   if type == "POST" and path == "/users":
+            # POST /users w/ body content
+            data = self.headers["BODY"]
+
+            info = json.loads(data)
+
+            info['id'] = get_next_id()
+
+            users_collection.insert_one(info)
+            info.pop('_id')
+
+            json_object = json.dumps(info)
+
+            response = responseBuilder(201, "application/json; charset=utf-8", str(byteSize(json_object)), "") 
+            self.request.sendall((response.encode()) + (json_object.encode()))
   
-  
-  
+    elif type == "PUT" and path.startswith("/users/"):
+            # PUT /users/{id}
+            id = path.split('/')[-1]
+            
+            # update the record with the id of {id} using the data from body of the request
+            data = self.headers["BODY"]
+            info = json.loads(data)
+            
+            if id.isnumeric():
+                id_object = users_collection.find_one({'id': int(id)})
+
+                if id_object:
+                    query = {"id": int(id)}
+                    newvalues = {"$set": info}
+                    users_collection.update_one(query, newvalues)
+
+                    user_info = users_collection.find_one({'id': int(id)}, {"_id": False})
+                    
+                    json_object = json.dumps(user_info)
+
+                    response = responseBuilder(200, "application/json; charset=utf-8", str(byteSize(json_object)), "")
+                    self.request.sendall((response.encode()) + (json_object.encode()))
+                else:
+                    response = responseBuilder(404, "text/plain; charset=utf-8", "36", "") + "The requested content was not found."
+                    self.request.sendall(response.encode())
   
   
   
