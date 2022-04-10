@@ -10,7 +10,7 @@ The inputted data will be:
 def handle(TCP, path, data):
     if path == b'/':
         Message = b'Website still under construction!'
-        Message_Length = str(sys.getsizeof(Message))
-        initial = b'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length:' + Message_Length.encode() + b'\r\n\r\n' + Message
+        Message_Length = str(len(Message)).encode()
+        initial = b'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length:' + Message_Length + b'\r\n\r\n' + Message
         TCP.request.sendall(initial)
 
