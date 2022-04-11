@@ -32,4 +32,4 @@ def handle(TCP, path, data):
 
     response = TCP.generate_http_response(TCP, body.encode(), 'text/plain; charset=utf-8', '404')
     
-    return TCP.request.sendall(response)
+    return TCP.request.sendall(response) 
