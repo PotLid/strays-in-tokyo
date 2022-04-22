@@ -7,7 +7,7 @@ import styles from './styles.module.scss';
 
 function CustomLink({children, to, ...props}) {
     let resolved = useResolvedPath(to);
-    let match = useMatch({ path: resolved.pathname, end: true });
+    let match = useMatch({path: resolved.pathname, end: true});
 
     return (
         <Link className={match ? `${styles['link']} ${styles.active}` : styles['link']} to={to} {...props} >
@@ -26,8 +26,8 @@ function Header(props) {
                     <ul className={styles['header-ul']}>
                         <li className={styles['header-li']}><CustomLink to={URL_HOME}>HOME</CustomLink></li>
                         <li className={styles['header-li']}><CustomLink to={URL_LOGIN}>LOGIN</CustomLink></li>
-                        <li className={styles['header-li']}><CustomLink to={URL_ABOUT}>ABOUT</CustomLink></li>
                         <li className={styles['header-li']}><CustomLink to={URL_CHAT}>CHAT</CustomLink></li>
+                        <li className={styles['header-li']}><CustomLink to={URL_ABOUT}>ABOUT</CustomLink></li>
                     </ul>
                 </nav>
             </div>
