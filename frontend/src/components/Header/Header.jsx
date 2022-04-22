@@ -1,7 +1,7 @@
 import React from 'react';
 import {Link, useResolvedPath, useMatch} from "react-router-dom";
 
-import {URL_HOME, URL_LOGIN, URL_ABOUT} from "../../app/const";
+import {URL_HOME, URL_LOGIN, URL_ABOUT, URL_CHAT} from "../../app/const";
 
 import styles from './styles.module.scss';
 
@@ -27,6 +27,7 @@ function Header(props) {
                         <li className={styles['header-li']}><CustomLink to={URL_HOME}>HOME</CustomLink></li>
                         <li className={styles['header-li']}><CustomLink to={URL_LOGIN}>LOGIN</CustomLink></li>
                         <li className={styles['header-li']}><CustomLink to={URL_ABOUT}>ABOUT</CustomLink></li>
+                        <li className={styles['header-li']}><CustomLink to={URL_CHAT}>CHAT</CustomLink></li>
                     </ul>
                 </nav>
             </div>

@@ -1,0 +1,5 @@
+@use '../../App';
+
+.view-login {
+  @include App.app-body;
+}

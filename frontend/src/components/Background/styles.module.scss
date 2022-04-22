@@ -9,6 +9,7 @@
   padding: 6.25rem;
   background: linear-gradient(#2b1055, #7597de);
   z-index: -1;
+  min-height: App.$desktop_min_height;
 
   & > img {
     position: absolute;
