@@ -1,0 +1,73 @@
+@use '../../App';
+
+.app-header {
+  @include App.app-header;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.header-wrap {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  max-width: App.$desktop_max;
+  min-width: App.$desktop_min;
+  //padding: 0 1.25rem;
+}
+
+.header-logo {
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 700;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.125rem;
+  margin: 1rem;
+
+  cursor: default;
+}
+
+.header-nav {
+
+}
+
+.header-ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  & > li {
+    display: inline-block;
+  }
+}
+
+.header-li {
+
+}
+
+.link {
+  color: #fff;
+  background-color: transparent;
+  text-decoration: none;
+
+  margin: 0.5rem 1rem 1rem;
+  padding: 0.75rem 2rem;
+
+  font-weight: 700;
+  font-size: 1.2rem;
+
+  border-radius: .5rem;
+
+  -webkit-transition: all .2s ease-in;
+  transition: all .2s ease-in;
+
+  &:hover, &.active {
+    color: #2b1055;
+    background: #fff;
+  }
+}
+
