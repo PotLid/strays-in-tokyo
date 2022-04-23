@@ -56,7 +56,7 @@ function Chat() {
                     <div className={styles['footer']}>
                         <form className={styles['form_chat']}>
                             <input type="text" name=""/>
-                                <button> SEND ➤</button>
+                                <button onClick={e => e.preventDefault()}> SEND ➤</button>
                         </form>
                     </div>
 
