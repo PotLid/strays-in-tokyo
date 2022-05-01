@@ -1,0 +1,250 @@
+
+*,
+*::before,
+*::after {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+
+.container {
+  justify-content:space-between;
+  width: 500px;
+  height: 50vh;
+  display: flex;
+  box-shadow: 10px 10px 5px 0px #1809303d;
+  background-image: linear-gradient(to bottom, #44198800, #431988 70%);
+  margin-top: 8.5rem;
+  border-radius: 1rem;
+}
+
+.container_vertical {
+    padding: 2rem;
+    width: 500px;
+    height: 50vh;
+    overflow: auto;
+    display: flex;
+    flex-direction: row;
+    box-shadow: 0px -3px 10px -10px #240a2f4a;
+    background-image: linear-gradient(to bottom, #44198800, #431988 70%);
+    border-radius: 0px 15px 15px 0px;
+    border-radius: 1rem;
+}
+
+
+body {
+  font-family: 'Poppins';
+  font-weight: 700;
+  background: linear-gradient(#2b1055, #7597de);
+  height: 100vh;
+  display: -ms-grid;
+  display: grid;
+
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  color: #ffffff;
+}
+
+
+header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 10000;
+}
+
+/*---------------Team Logo-------------*/
+header .team {
+    color: #ffffff;
+    font-weight: 700;
+    text-decoration: none;
+    font-size: 2em;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+
+/*---------------Buttons-------------*/
+header .buttonlogout {
+    display: block;
+    float: right;
+
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+    margin-top: 0.5rem;
+    padding: 0.75rem 2rem;
+    
+    font-weight: 700;
+    font-size: 120%;
+    color: #2b1055;
+    background-color: #ffffff;
+
+    border-radius: 0.5rem;
+
+    outline: none;
+    border: none;
+    cursor: pointer;
+    -webkit-transition: background-color 200ms ease in;
+    transition: background-color 200ms ease in;
+}
+
+header .buttonlogout:hover {
+    background-color: #180930;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+header .buttonlogout:link {
+    text-decoration: none;
+}
+
+.buttonlogout:visited {
+    text-decoration: none;
+}
+
+label {
+    display: block;
+    float: left;
+
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+    padding: 0.75rem 2rem;
+    
+    font-weight: 700;
+    font-size: 90%;
+    color: #2b1055;
+    background-color: #ffffff;
+
+    border-radius: 0.5rem;
+
+    outline: none;
+    border: none;
+    cursor: pointer;
+    -webkit-transition: background-color 200ms ease in;
+    transition: background-color 200ms ease in;
+
+}
+
+
+label:hover {
+    background-color: #180930;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+label:link {
+    text-decoration: none;
+}
+
+label:visited {
+    text-decoration: none;
+}
+
+
+
+input#confirm {
+    display: block;
+    float: right;
+
+    margin-right: -5rem;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+    padding: 0.75rem 2rem;
+    
+    font-weight: 700;
+    font-size: 90%;
+    font-family: 'Poppins';
+    color: #2b1055;
+    background-color: #ffffff;
+
+    border-radius: 0.5rem;
+
+    outline: none;
+    border: none;
+    cursor: pointer;
+    -webkit-transition: background-color 200ms ease in;
+    transition: background-color 200ms ease in;
+
+}
+
+
+input#confirm:hover {
+    background-color: #180930;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+input#confirm:link {
+    text-decoration: none;
+}
+
+input#confirm:visited {
+    text-decoration: none;
+}
+/*---------------Images-------------*/
+section {
+  width: 100%;
+  height: 100vh;
+}
+
+section img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
+
+section img#moon {
+    mix-blend-mode: screen;
+}
+
+section img#kitty {
+    position: relative;
+    border-radius: 50%;
+    margin-top: 1.5rem;
+    height: auto;
+    width: 100px;
+    background-color: #ffffff;
+    z-index: 1;
+}
+/* Custom Scrollbar
+   ==========================================================================
+*/
+
+::-webkit-scrollbar {
+  width: 13px; /* Vertical */
+  height: 13px; /* Horizontal */
+}
+
+::-webkit-scrollbar-track {
+  background: #1a0620;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 20px;
+  background: #310d3f;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  border-radius: 20px;
+  background: #490c61;
+}
+
+::-webkit-scrollbar-corner {
+  background-color: transparent;
+}
