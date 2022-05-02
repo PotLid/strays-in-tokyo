@@ -1,0 +1,5 @@
+@use '../../App';
+
+.view-about {
+  @include App.app-body;
+}
