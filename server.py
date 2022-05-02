@@ -5,21 +5,21 @@ from backend.httpRequestParser import parseRequest
 from backend.httpContentLengthParser import parseContentLength
 from backend.RequestHandling import GETrequests, POSTrequests, PUTrequests, DELETErequests
 
-# Creating a pymongo client
-MongoClient = MongoClient('localhost', 27017)
-
-# Important: In MongoDB, a database is not created until it gets content!
-mydb = MongoClient["312Project"]
-
-# Creating database collections
-userCollection = mydb["Users"]
-postCollection = mydb["Posts"]
-buffer_length = 0
-Content_Length = 0
-
-
 
 class MyTCPHandler(socketserver.BaseRequestHandler):
+
+    # Creating a pymongo client
+    MongoClient = MongoClient('localhost', 27017)
+
+    # Important: In MongoDB, a database is not created until it gets content!
+    mydb = MongoClient["312Project"]
+
+    # Creating database collections
+    userCollection = mydb["Users"]
+    postCollection = mydb["Posts"]
+
+    buffer_length = 0
+    Content_Length = 0
 
     # Escapes the HTML for security
     def escape_html(self, input):
