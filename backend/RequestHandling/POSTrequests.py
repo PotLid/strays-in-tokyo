@@ -3,6 +3,8 @@ import json
 import socketserver
 import pymongo
 import server
+import backend.userHandling
+import backend.MultiPartFormParser
 
 '''
 This method will handle the POST requests
@@ -15,8 +17,20 @@ The inputted data will be:
 users_id_collection = {}
 
 def handle(TCP, path, data):
-
+    print("This is the data in line 20 of POST handling: ", data, '\n')
     # POST /users
+
+    #This is where we will authenticate the users
+    if path == b'/login':
+        backend.userHandling.parse(TCP, path, data)
+        
+    if path == b'/register':
+        backend.userHandling.parse(TCP, path, data)
+       
+    if path == b'/settings':
+       backend.userHandling.parse(TCP, path, data)
+
+    ###########################################################################
 
     if path == b'/users' or path == b'/users/':
         # body of the request is a JSON object with email and username fields
@@ -39,7 +53,7 @@ def handle(TCP, path, data):
 
     body = "The requested content was not found."
 
-    response = TCP.generate_http_response(TCP, body.encode(), 'text/plain; charset=utf-8', '404')
+    response = server.MyTCPHandler.generate_http_response(TCP, body.encode(), 'text/plain; charset=utf-8', '404')
     
     return TCP.request.sendall(response)
 

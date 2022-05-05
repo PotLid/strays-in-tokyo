@@ -15,7 +15,16 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
     mydb = MongoClient["312Project"]
 
     # Creating database collections
+
+    '''
+    The UserCollection will consist of the following keys:
+    {'email':email, 'authenticated_token': authenticated_token when they first sign in, 'authenticated_xsrf_token':xsrf_token, 'profile_picture':image_file}
+    '''
     userCollection = mydb["Users"]
+    '''
+    The postCollection will consist of the following keys:
+    {'email':email, 'comment':comment}
+    '''
     postCollection = mydb["Posts"]
 
     buffer_length = 0
@@ -90,11 +99,11 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
         if request_type == b'GET':
             GETrequests.handle(self, request_path, data_to_handle)
         if request_type == b'POST':
-            POSTrequests.handle(self, request_path, data_to_handle)
+            POSTrequests.handle(self, request_path, data_to_handle[b'Body'])
         if request_type == b'PUT':
-            PUTrequests.handle(self, request_path, data_to_handle)
+            PUTrequests.handle(self, request_path, data_to_handle[b'Body'])
         if request_type == b'DELETE':
-            DELETErequests.handle(self, request_path, data_to_handle)
+            DELETErequests.handle(self, request_path, data_to_handle[b'Body'])
 
 
 if __name__ == "__main__":

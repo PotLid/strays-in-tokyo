@@ -29,7 +29,7 @@
                         <h2>Account Settings</h2>
                         <img src = "/frontend/static/kitty.png" id = "kitty">
 
-                        <form>
+                        <form action="/settings" id="profile-picture-form" method="post" enctype="multipart/form-data">
                             <input type = "file" id = "myFile" name = "filename" hidden>
                             <label for = "myFile">Upload image</label><br>
                             <input type="submit" id = "confirm" value="Confirm">

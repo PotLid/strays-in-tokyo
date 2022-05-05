@@ -1,4 +1,4 @@
-from server import MyTCPHandler, userCollection
+from server import MyTCPHandler
 import random
 import json
 import hashlib
