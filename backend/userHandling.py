@@ -101,7 +101,7 @@ def handleRegistration(TCP, email, password, confirm_password):
         password = password + random_salt
         # Hash the passcode
         hashed = bcrypt.hashpw(password, random_salt)
-        server.MyTCPHandler.userCollection.insert_one({'email': email, 'salt':random_salt, 'hash': hashed})
+        server.MyTCPHandler.userCollection.insert_one({'email': email, 'hash': hashed})
         # Redirect to the homepage after registering
         RedirectResponse = 'HTTP/1.1 301 Moved Permanently\r\nContent-Type: text/plain\r\nContent-Length: 0\r\nLocation: /login\r\n\r\n'
         return TCP.request.sendall(RedirectResponse.encode())
