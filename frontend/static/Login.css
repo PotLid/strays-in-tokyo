@@ -1,0 +1,329 @@
+
+*,
+*::before,
+*::after {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+
+
+body {
+  font-family: 'Poppins';
+  font-weight: 700;
+  background: linear-gradient(#2b1055, #7597de);
+  height: 100vh;
+  display: -ms-grid;
+  display: grid;
+
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  color: #ffffff;
+}
+
+
+
+header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 10000;
+}
+
+
+/*---------------Team Logo-------------*/
+header .team {
+    color: #ffffff;
+    font-weight: 700;
+    text-decoration: none;
+    font-size: 2em;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+
+/*---------------Buttons-------------*/
+header .buttonlogin {
+    display: block;
+    float: right;
+
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+    margin-top: 0.5rem;
+    padding: 0.75rem 2rem;
+
+    font-weight: 700;
+    font-size: 120%;
+    color: #2b1055;
+    background-color: #ffffff;
+
+    border-radius: 0.5rem;
+
+    outline: none;
+    border: none;
+    cursor: pointer;
+    -webkit-transition: background-color 200ms ease in;
+    transition: background-color 200ms ease in;
+}
+
+header .buttonlogin:hover {
+    background-color: #180930;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+header .buttonlogin:link {
+    text-decoration: none;
+}
+
+.buttonlogin:visited {
+    text-decoration: none;
+}
+
+
+
+header .buttonhome {
+    display: block;
+    float: right;
+
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+    margin-top: 0.5rem;
+    padding: 0.75rem 2rem;
+
+    font-weight: 700;
+    font-size: 120%;
+    color: #ffffff;
+
+    border-radius: 0.5rem;
+
+    outline: none;
+    border: none;
+    cursor: pointer;
+    -webkit-transition: background-color 200ms ease in;
+    transition: background-color 200ms ease in;
+}
+
+header .buttonhome:hover {
+    background-color: #ffffff;
+    color: #2b1055;
+    text-decoration: none;
+}
+
+header .buttonhome:link {
+    text-decoration: none;
+}
+
+header .buttonhome:visited {
+    text-decoration: none;
+}
+
+
+
+header .buttonregister {
+    display: block;
+    float: right;
+
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+    margin-top: 0.5rem;
+    padding: 0.75rem 2rem;
+
+    font-weight: 700;
+    font-size: 120%;
+    color: #ffffff;
+
+    border-radius: 0.5rem;
+
+    outline: none;
+    border: none;
+    cursor: pointer;
+    -webkit-transition: background-color 200ms ease in;
+    transition: background-color 200ms ease in;
+}
+
+header .buttonregister:hover {
+    background-color: #ffffff;
+    color: #2b1055;
+    text-decoration: none;
+}
+
+header .buttonregister:link {
+    text-decoration: none;
+}
+
+header .buttonregister:visited {
+    text-decoration: none;
+}
+
+
+
+header .buttonabout {
+    display: block;
+    float: right;
+
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+    margin-top: 0.5rem;
+    padding: 0.75rem 2rem;
+
+    font-weight: 700;
+    font-size: 120%;
+    color: #ffffff;
+
+    border-radius: 0.5rem;
+
+    outline: none;
+    border: none;
+    cursor: pointer;
+    -webkit-transition: background-color 200ms ease in;
+    transition: background-color 200ms ease in;
+}
+
+header .buttonabout:hover {
+    background-color: #ffffff;
+    color: #2b1055;
+    text-decoration: none;
+}
+
+header .buttonabout:link {
+    text-decoration: none;
+}
+
+header .buttonabout:visited {
+    text-decoration: none;
+}
+
+
+
+/*---------------Form-------------*/
+form {
+  margin-top: 7rem;
+  margin-bottom: 7rem;
+  width: 40rem;
+  height: 38rem;
+  padding: 3rem;
+  border-radius: 1rem;
+  background-image: linear-gradient(to bottom, #44198800, #431988 40%);
+}
+
+
+.formtitle {
+  text-shadow: 0px 2px 1px rgba(0, 0, 0, 0.25);
+  text-align: center;
+  font-size: 300%;
+  letter-spacing: 2px;
+  text-decoration: none;
+  margin-bottom: 3rem;
+}
+
+
+.formdescription {
+  text-align: center;
+  text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);
+  margin-bottom: 2rem;
+}
+
+.formgroup {
+  position: relative;
+  color: #7597de;
+  height: 3rem;
+  margin-bottom: 1.5rem;
+}
+
+.forminput {
+  width: 100%;
+  height: 100%;
+  border: 2px solid #2b1055;
+  border-radius: 0.5rem;
+  font-family: inherit;
+  font-weight: inherit;
+  color: inherit;
+  outline: none;
+  padding: 1.25rem;
+  background: none;
+}
+
+.forminput:hover {
+  border-color: #7597de;
+}
+
+.forminput:focus {
+  border-color: #7597de;
+}
+
+.formlabel {
+  position: absolute;
+  left: 1rem;
+  top: 0.9rem;
+  padding: 0 0.5rem;
+  background-color: #441988;
+  -webkit-transition: top 200ms ease-in, left 200ms ease-in, font-size 200ms ease-in;
+  transition: top 200ms ease-in, left 200ms ease-in, font-size 200ms ease-in;
+}
+
+
+.formbutton {
+  display: block;
+  margin: auto;
+  padding: 1rem 3rem;
+
+  background-color: #2b1055;
+
+  font-family: inherit;
+  font-weight: inherit;
+  font-size: larger;
+
+  color: #ffffff;
+
+  border-radius: 0.5rem;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  -webkit-transition: background-color 200ms ease in;
+  transition: background-color 200ms ease in;
+}
+
+.formbutton:hover {
+  background-color: #1b0a36;
+}
+
+.forminput:focus ~ .formlabel,
+.forminput:not(:placeholder-shown).forminput:not(:focus) ~ .formlabel {
+  top: -0.5rem;
+  left: 0.8rem;
+  font-size: 0.8rem;
+}
+
+
+
+/*---------------Images-------------*/
+section {
+  width: 100%;
+  height: 100vh;
+}
+
+section img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
+
+section img#moon {
+    mix-blend-mode: screen;
+} 

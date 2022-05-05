@@ -4,7 +4,7 @@
       <meta charset="UTF-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <link rel=stylesheet type=text/css href="{{ url_for('static', filename='Settings.css') }}">
+      <link rel=stylesheet type=text/css href="/frontend/static/Settings.css">
       <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Luckiest+Guy&family=Oswald:wght@700&family=Poppins&display=swap" rel="stylesheet">
   </head>
     <body>
@@ -13,22 +13,21 @@
                 <h1 class = "team"> Team Strays in Tokyo </h1>
                 
                 <ul>
-                    <a button class = "buttonlogout" href = "{{ url_for('homepage') }}" >Log out</button></a>
+                    <a button class = "buttonlogout" href = "/" >Log out</button></a>
                 </ul>
             </header>
 
-            <img src = "{{url_for('static', filename='stars.png')}}" id = "stars">
-            <img src = "{{url_for('static', filename='moon.png')}}" id = "moon">
-            <img src = "{{url_for('static', filename='mountains_behind.png')}}" id = "mountains_behind">
-            <img src = "{{url_for('static', filename='mountains_front.png')}}" id = "mountains_front">
-
+            <img src = "/frontend/static/stars.png">
+            <img src = "/frontend/static/moon.png">
+            <img src = "/frontend/static/mountains_behind.png">
+            <img src = "/frontend/static/mountains_front.png">
 
 
             <div class = "container">
                 <div class = "container_vertical">
                     <div class = "body">
                         <h2>Account Settings</h2>
-                        <img src = "{{url_for('static', filename='kitty.png')}}" id = "kitty">
+                        <img src = "/frontend/static/kitty.png" id = "kitty">
 
                         <form>
                             <input type = "file" id = "myFile" name = "filename" hidden>
