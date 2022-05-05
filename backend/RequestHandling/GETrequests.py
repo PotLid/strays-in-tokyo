@@ -1,4 +1,3 @@
-from asyncore import read
 import sys
 import json
 import socketserver
@@ -70,7 +69,7 @@ def handle(TCP, path, data):
         TCP.request.sendall(content)
 
     elif path == b'/websocket':
-        websocketHandler.handleWebSocket(TCP, data)
+        websocketHandler.websocket_request(TCP, data)
 
 
     elif path == b'/users':

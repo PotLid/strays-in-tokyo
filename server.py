@@ -35,7 +35,8 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
         response += body
         return response
 
-
+    # SUBJECT TO CHANGE
+    websocket_connections = {}
 
 
     def handle(self):
