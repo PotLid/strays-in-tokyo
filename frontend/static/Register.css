@@ -73,8 +73,8 @@ header .buttonregister {
     outline: none;
     border: none;
     cursor: pointer;
-    -webkit-transition: background-color 200ms ease in;
-    transition: background-color 200ms ease in;
+    -webkit-transition: background-color 200ms ease-in;
+    transition: background-color .2s ease-in;
 }
 
 header .buttonregister:hover {
@@ -111,8 +111,8 @@ header .buttonhome {
     outline: none;
     border: none;
     cursor: pointer;
-    -webkit-transition: background-color 200ms ease in;
-    transition: background-color 200ms ease in;
+    -webkit-transition: background-color 200ms ease-in;
+    transition: background-color .2s ease-in;
 }
 
 header .buttonhome:hover {
@@ -149,8 +149,8 @@ header .buttonlogin {
     outline: none;
     border: none;
     cursor: pointer;
-    -webkit-transition: background-color 200ms ease in;
-    transition: background-color 200ms ease in;
+    -webkit-transition: background-color 200ms ease-in;
+    transition: background-color .2s ease-in;
 }
 
 header .buttonlogin:hover {
@@ -166,45 +166,6 @@ header .buttonlogin:link {
 header .buttonlogin:visited {
     text-decoration: none;
 }
-
-
-
-header .buttonabout {
-    display: block;
-    float: right;
-
-    margin-right: 1rem;
-    margin-bottom: 1rem;
-    margin-top: 0.5rem;
-    padding: 0.75rem 2rem;
-
-    font-weight: 700;
-    font-size: 120%;
-    color: #ffffff;
-
-    border-radius: 0.5rem;
-
-    outline: none;
-    border: none;
-    cursor: pointer;
-    -webkit-transition: background-color 200ms ease in;
-    transition: background-color 200ms ease in;
-}
-
-header .buttonabout:hover {
-    background-color: #ffffff;
-    color: #2b1055;
-    text-decoration: none;
-}
-
-header .buttonabout:link {
-    text-decoration: none;
-}
-
-header .buttonabout:visited {
-    text-decoration: none;
-}
-
 
 
 /*---------------Form-------------*/
@@ -297,7 +258,7 @@ form {
   border: none;
   cursor: pointer;
   -webkit-transition: background-color 200ms ease in;
-  transition: background-color 200ms ease in;
+  transition: background-color 200ms ease-in;
 }
 
 .formbutton:hover {

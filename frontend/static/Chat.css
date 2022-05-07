@@ -22,14 +22,32 @@
 
 .container2 {
   justify-content:space-between;
-  width: 900px;
   height: 75vh;
   display: flex;
   flex-direction: column;
   box-shadow: 0px -3px 10px -10px #240a2f4a;
   background-image: linear-gradient(to bottom, #44198800, #431988 70%);
   border-radius: 0px 15px 15px 0px;
+  padding-bottom: 1.5rem;
+  padding-left: 1.5rem;
+  padding-top: 1.5rem;
+}
+
+.container3 {
+  justify-content:space-between;
+  width: 650px;
+  height: 75vh;
+  display: flex;
+  overflow: auto;
+  flex-direction: column;
+  background-image: linear-gradient(to bottom, #44198800, #431988 70%);
+  border-radius: 0px 15px 15px 0px;
   padding: 1.5rem;
+}
+
+.footer {
+  padding-top: 1.5rem;
+  padding-right: 1rem;
 }
 
 .users {
@@ -57,7 +75,6 @@ body {
           align-items: center;
   color: #ffffff;
 }
-
 
 header {
     position: absolute;
@@ -100,7 +117,7 @@ header {
   border-bottom-left-radius: 10px;
   animation-name: side_border;
   animation-duration: 0.25s;
-  border-left: 3.7px solid #ffffff;
+  border-right: 4.3px solid #ffffff;
   box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
 }
 
@@ -109,15 +126,15 @@ header {
   border-bottom-left-radius: 10px;
   animation-name: side_border2;
   animation-duration: 0.25s;
-  border-left: 3.7px solid #2b1055;
+  border-left: 4.3px solid #2b1055;
   box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
 }
 
 @keyframes side_border {
-  0%   {border-left: 2px solid #ffffff2c;}
-  25%  {border-left: 3px solid #ffffff54;}
-  50%  {border-left: 3.5px solid #ffffff6e;}
-  100% {border-left: 3.7px solid #ffffff9a;}
+  0%   {border-right: 2px solid #ffffff2c;}
+  25%  {border-right: 3px solid #ffffff54;}
+  50%  {border-right: 4px solid #ffffff6e;}
+  100% {border-right: 4.3px solid #ffffff9a;}
 }
 
 @keyframes side_border2 {
@@ -156,6 +173,8 @@ form button{
   background-color:#180930;
   color: white;
   border-radius: 0.5rem;
+  -webkit-transition: background-color 200ms ease in;
+  transition: background-color .2s ease-in;
 }
 
 form button:hover {
@@ -201,6 +220,7 @@ li:link {
 li:visited {
   text-decoration: none;
 }
+
 /*---------------Team Logo-------------*/
 header .team {
     color: #ffffff;
@@ -211,45 +231,119 @@ header .team {
     letter-spacing: 2px;
 }
 
-
 /*---------------Buttons-------------*/
+header .buttonchat {
+  display: block;
+  float: right;
+
+  margin-right: 1rem;
+  margin-bottom: 1rem;
+  margin-top: 0.5rem;
+  padding: 0.75rem 2rem;
+  
+  font-weight: 700;
+  font-size: 120%;
+  color: #2b1055;
+  background-color: #ffffff;
+
+  border-radius: 0.5rem;
+
+  outline: none;
+  border: none;
+  cursor: pointer;
+  -webkit-transition: background-color 200ms ease in;
+  transition: background-color .2s ease-in;
+}
+
+header .buttonchat:hover {
+  background-color: #180930;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+header .buttonchat:link {
+  text-decoration: none;
+}
+
+.buttonchat:visited {
+  text-decoration: none;
+}
+
+
+
+header .buttonsettings {
+  display: block;
+  float: right;
+
+  margin-right: 1rem;
+  margin-bottom: 1rem;
+  margin-top: 0.5rem;
+  padding: 0.75rem 2rem;
+  
+  font-weight: 700;
+  font-size: 120%;
+  color: #ffffff;
+
+  border-radius: 0.5rem;
+
+  outline: none;
+  border: none;
+  cursor: pointer;
+  -webkit-transition: background-color 200ms ease in;
+  transition: background-color .2s ease-in;
+}
+
+header .buttonsettings:hover {
+  background-color: #ffffff;
+  color: #2b1055;
+  text-decoration: none;
+}
+
+header .buttonsettings:link {
+  text-decoration: none;
+}
+
+header .buttonsettings:visited {
+  text-decoration: none;
+}
+
+
+
 header .buttonlogout {
-    display: block;
-    float: right;
+  display: block;
+  float: right;
 
-    margin-right: 1rem;
-    margin-bottom: 1rem;
-    margin-top: 0.5rem;
-    padding: 0.75rem 2rem;
-    
-    font-weight: 700;
-    font-size: 120%;
-    color: #2b1055;
-    background-color: #ffffff;
+  margin-right: 1rem;
+  margin-bottom: 1rem;
+  margin-top: 0.5rem;
+  padding: 0.75rem 2rem;
 
-    border-radius: 0.5rem;
+  font-weight: 700;
+  font-size: 120%;
+  color: #ffffff;
 
-    outline: none;
-    border: none;
-    cursor: pointer;
-    -webkit-transition: background-color 200ms ease in;
-    transition: background-color 200ms ease in;
+  border-radius: 0.5rem;
+
+  outline: none;
+  border: none;
+  cursor: pointer;
+  -webkit-transition: background-color 200ms ease in;
+  transition: background-color .2s ease-in;
 }
 
 header .buttonlogout:hover {
-    background-color: #180930;
-    color: #ffffff;
-    text-decoration: none;
+  background-color: #ffffff;
+  color: #2b1055;
+  text-decoration: none;
 }
 
 header .buttonlogout:link {
-    text-decoration: none;
+  text-decoration: none;
 }
 
-.buttonlogout:visited {
-    text-decoration: none;
+header .buttonlogout:visited {
+  text-decoration: none;
 }
-
 /*---------------Images-------------*/
 section {
   width: 100%;

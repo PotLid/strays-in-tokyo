@@ -75,42 +75,119 @@ header .team {
 }
 
 
+
 /*---------------Buttons-------------*/
+header .buttonsettings {
+  display: block;
+  float: right;
+
+  margin-right: 1rem;
+  margin-bottom: 1rem;
+  margin-top: 0.5rem;
+  padding: 0.75rem 2rem;
+  
+  font-weight: 700;
+  font-size: 120%;
+  color: #2b1055;
+  background-color: #ffffff;
+
+  border-radius: 0.5rem;
+
+  outline: none;
+  border: none;
+  cursor: pointer;
+  -webkit-transition: background-color 200ms ease in;
+  transition: background-color .2s ease-in;
+}
+
+header .buttonsettings:hover {
+  background-color: #180930;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+header .buttonsettings:link {
+  text-decoration: none;
+}
+
+.buttonsettings:visited {
+  text-decoration: none;
+}
+
+
+
+header .buttonchat {
+  display: block;
+  float: right;
+
+  margin-right: 1rem;
+  margin-bottom: 1rem;
+  margin-top: 0.5rem;
+  padding: 0.75rem 2rem;
+  
+  font-weight: 700;
+  font-size: 120%;
+  color: #ffffff;
+
+  border-radius: 0.5rem;
+
+  outline: none;
+  border: none;
+  cursor: pointer;
+  -webkit-transition: background-color 200ms ease in;
+  transition: background-color .2s ease-in;
+}
+
+header .buttonchat:hover {
+  background-color: #ffffff;
+  color: #2b1055;
+  text-decoration: none;
+}
+
+header .buttonchat:link {
+  text-decoration: none;
+}
+
+header .buttonchat:visited {
+  text-decoration: none;
+}
+
+
+
 header .buttonlogout {
-    display: block;
-    float: right;
+  display: block;
+  float: right;
 
-    margin-right: 1rem;
-    margin-bottom: 1rem;
-    margin-top: 0.5rem;
-    padding: 0.75rem 2rem;
-    
-    font-weight: 700;
-    font-size: 120%;
-    color: #2b1055;
-    background-color: #ffffff;
+  margin-right: 1rem;
+  margin-bottom: 1rem;
+  margin-top: 0.5rem;
+  padding: 0.75rem 2rem;
 
-    border-radius: 0.5rem;
+  font-weight: 700;
+  font-size: 120%;
+  color: #ffffff;
 
-    outline: none;
-    border: none;
-    cursor: pointer;
-    -webkit-transition: background-color 200ms ease in;
-    transition: background-color 200ms ease in;
+  border-radius: 0.5rem;
+
+  outline: none;
+  border: none;
+  cursor: pointer;
+  -webkit-transition: background-color .2s ease-in;
+  transition: background-color .2s ease in;
 }
 
 header .buttonlogout:hover {
-    background-color: #180930;
-    color: #ffffff;
-    text-decoration: none;
+  background-color: #ffffff;
+  color: #2b1055;
+  text-decoration: none;
 }
 
 header .buttonlogout:link {
-    text-decoration: none;
+  text-decoration: none;
 }
 
-.buttonlogout:visited {
-    text-decoration: none;
+header .buttonlogout:visited {
+  text-decoration: none;
 }
 
 label {
@@ -132,9 +209,8 @@ label {
     outline: none;
     border: none;
     cursor: pointer;
-    -webkit-transition: background-color 200ms ease in;
-    transition: background-color 200ms ease in;
-
+    -webkit-transition: background-color .2s ease-in;
+    transition: background-color .2s ease-in;
 }
 
 
@@ -174,9 +250,8 @@ input#confirm {
     outline: none;
     border: none;
     cursor: pointer;
-    -webkit-transition: background-color 200ms ease in;
-    transition: background-color 200ms ease in;
-
+    -webkit-transition: background-color .2s ease-in;
+    transition: background-color .2s ease in;
 }
 
 
@@ -210,7 +285,7 @@ section img {
 }
 
 section img#moon {
-    mix-blend-mode: screen;
+  mix-blend-mode: screen;
 }
 
 section img#kitty {

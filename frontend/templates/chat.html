@@ -5,9 +5,27 @@
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <link rel=stylesheet type=text/css href="/frontend/static/Chat.css">
+      <link rel="icon" type="image/png" href="/frontend/static/cat.png" sizes ="32x32"/>
       <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Luckiest+Guy&family=Oswald:wght@700&family=Poppins&display=swap" rel="stylesheet">
     </head>
     <body>
+        <section>
+            <header>
+                <h1 class = "team"> Team Strays in Tokyo </h1>
+                
+                <ul>
+                    <a button class = "buttonchat" href = "/chatpage" >Chat</button></a>
+
+                    <a button class = "buttonsettings" href = "/settings">Settings</button></a>
+
+                    <a button class = "buttonlogout" href = "/" >Log out</button></a>
+                </ul>
+            </header>
+
+            <img src = "/frontend/static/stars.png" id = "stars">
+            <img src = "/frontend/static/moon.png" id = "moon">
+            <img src = "/frontend/static/mountains_behind.png" id = "mountains_behind">
+            <img src = "/frontend/static/mountains_front.png" id = "mountains_front">
 
             <div class = "container">
 
@@ -24,24 +42,27 @@
                     </div>
                 </div>
 
-
                 <div class = "container2">
 
-                    <div class = "body">
-                        <p class = "message"> Hello </p>
-                        <p class = "user_message"> What's up? </p>
+                    <div class = "container3">
+                        <div class = "body">
+                            <p class = "message"> Hello </p>
+                            <p class = "user_message"> What's up? </p>
+                        </div>
                     </div>
+                
                     {{loop}}{{end_loop}}
                     <div class = "footer">
                         <form action="/chatpage" id="chat-form" method="post" enctype="multipart/form-data">
                             <input value="{{xsrf_token}}" name="xsrf_token" hidden>
                             <input type = "text" name = "comment">
-                            <button> SEND ➤</button>
+                            <button> SEND </button>
                         </form>
                     </div>
 
                 </div>
             </div>
 
+        </section>
     </body>
 </html>
