@@ -18,7 +18,7 @@
 
                     <a button class = "buttonsettings" href = "/settings">Settings</button></a>
 
-                    <a button class = "buttonlogout" href = "/" >Log out</button></a>
+                    <a button class = "buttonlogout" href = "/logout" >Log out</button></a>
                 </ul>
             </header>
 
@@ -31,9 +31,10 @@
                 <div class = "container_vertical">
                     <div class = "body">
                         <h2>Account Settings</h2>
-                        <img src = "/frontend/static/kitty.png" id = "kitty">
-
+                        <img src = "/frontend/static/{{profile_picture_name}}" id = "kitty">
+                        {{loop}}{{end_loop}}
                         <form action="/settings" id="profile-picture-form" method="post" enctype="multipart/form-data">
+                            <input value="{{xsrf_token}}" name="xsrf_token" hidden>
                             <input type = "file" id = "myFile" name = "filename" hidden>
                             <label for = "myFile">Upload image</label><br>
                             <input type="submit" id = "confirm" value="Confirm">

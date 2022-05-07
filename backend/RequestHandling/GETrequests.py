@@ -4,7 +4,7 @@ import json
 import socketserver
 import pymongo
 from backend.websocketHandler import handleWebSocket
-from backend.userHandling import authenticatedUser, handleVisit, authenticateXSRF, retrieveAuthenticationCookieId
+from backend.userHandling import authenticatedUser, handleVisit, authenticateXSRF, retrieveAuthenticationCookieId, handleLogout, retrieveProfilePicture
 import server
 import os
 from backend import websocketHandler
@@ -24,6 +24,18 @@ def handle(TCP, path, data):
         content = render_content("frontend/templates/homepage.html")
         content = server.MyTCPHandler.generate_http_response(TCP, content.encode(), "text/html; charset=utf-8", "200 OK")
         TCP.request.sendall(content)
+    
+    elif b'.jpg' in path:
+        path = path[1:].decode()
+        Exist = os.path.exists(path)
+        if Exist:
+            openJPG = open(path, "rb")
+            readJPG = openJPG.read()
+            JPGbyteSize = os.path.getsize(path)
+            JPGresponse = 'HTTP/1.1 200 OK\r\nContent-Type: image/png; charset=utf-8\r\nX-Content-Type-Options: nosniff\r\nContent-Length: ' + str(JPGbyteSize) + '\r\n\r\n'
+            JPGresponse = JPGresponse.encode()
+            JPGresponse += readJPG
+            TCP.request.sendall(JPGresponse)
     
     elif b'.png' in path:
         path = path[1:].decode()
@@ -58,6 +70,12 @@ def handle(TCP, path, data):
         content = render_content("frontend/templates/login.html")
         content = server.MyTCPHandler.generate_http_response(TCP, content.encode(), "text/html; charset=utf-8", "200 OK")
         TCP.request.sendall(content)
+    
+    elif path == b'/logout':
+        handleLogout(data[b'Cookie'])
+        # If the user has logged out, redirect them back to the home page 
+        RedirectResponse = 'HTTP/1.1 301 Moved Permanently\r\nContent-Type: text/plain\r\nContent-Length: 0\r\nLocation: /\r\n\r\n'
+        return TCP.request.sendall(RedirectResponse.encode())
 
     elif path == b'/register':
         content = render_content("frontend/templates/register.html")
@@ -66,9 +84,31 @@ def handle(TCP, path, data):
 
     # The user MUST be authenticated to even access this page
     elif path == b'/settings':
-        content = render_content("frontend/templates/settings.html")
-        content = server.MyTCPHandler.generate_http_response(TCP, content.encode(), "text/html; charset=utf-8", "200 OK")
-        TCP.request.sendall(content)
+        # We must add authentication to the chatapp page.
+        if b'Cookie' in data:
+            cookie_id = retrieveAuthenticationCookieId(data[b'Cookie'])
+            authenticated = authenticatedUser(cookie_id)
+            print("This is the username: ", authenticated, '\n')
+            xsrf_token = handleVisit(TCP, data, authenticated)
+            print("This is the XSRF token: ", xsrf_token)
+            if authenticated != None and authenticated != "":
+                profile_picture_name = retrieveProfilePicture(authenticated).decode()
+                content = render_template("frontend/templates/settings.html", {"xsrf_token":xsrf_token,
+                                                                            "profile_picture_name":profile_picture_name,
+                                                                            "loop_data": ''})
+                content = server.MyTCPHandler.generate_http_response(TCP, content.encode(), "text/html; charset=utf-8", "200 OK")
+                return TCP.request.sendall(content)
+            else:
+                Message = "You must log in to view this page"
+                LenOfMessage = len(Message)
+                NotFoundResponse = 'HTTP/1.1 403 Forbidden\r\nContent-Type: text/plain; charset=utf-8\r\nContent-Length: ' + str(LenOfMessage) + '\r\n\r\n' + Message
+                return TCP.request.sendall(NotFoundResponse.encode())
+        else:
+            Message = "You must log in to view this page"
+            LenOfMessage = len(Message)
+            NotFoundResponse = 'HTTP/1.1 403 Forbidden\r\nContent-Type: text/plain; charset=utf-8\r\nContent-Length: ' + str(LenOfMessage) + '\r\n\r\n' + Message
+            return TCP.request.sendall(NotFoundResponse.encode())
+    
 
     elif path == b'/chatpage':
         # We must add authentication to the chatapp page.
@@ -83,6 +123,11 @@ def handle(TCP, path, data):
                                                                             "loop_data": ''})
                 content = server.MyTCPHandler.generate_http_response(TCP, content.encode(), "text/html; charset=utf-8", "200 OK")
                 TCP.request.sendall(content)
+            else:
+                Message = "You must log in to view this page"
+                LenOfMessage = len(Message)
+                NotFoundResponse = 'HTTP/1.1 403 Forbidden\r\nContent-Type: text/plain; charset=utf-8\r\nContent-Length: ' + str(LenOfMessage) + '\r\n\r\n' + Message
+                return TCP.request.sendall(NotFoundResponse.encode())
         else:
             Message = "You must log in to view this page"
             LenOfMessage = len(Message)
