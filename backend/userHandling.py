@@ -278,7 +278,6 @@ def handleLogout(cookie_data):
     if user_info != None:
         server.MyTCPHandler.userCollection.update_one({"email": email}, {"$set":{"authenticated_token": b''}})
     return
-
 def onlineUsers():
     final_list = []
     all_users = server.MyTCPHandler.userCollection.find({})
@@ -293,15 +292,18 @@ def onlineUsers():
                 email = email.decode()
                 email = email.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
                 logged_in_users['username'] = email
+                logged_in_users['profile_picture_name'] = user['profile_picture'].decode()
             if user['email'].count(b'@') > 1:
                 last_needed_character =  user['email'].rfind(b'@')
                 email = user['email'][0:last_needed_character]
                 email = email.decode()
                 email = email.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
                 logged_in_users['username'] = email
+                logged_in_users['profile_picture_name'] = user['profile_picture'].decode()
             if user['email'].count(b'@') == 0:
                 email = user['email'].decode()
                 email = email.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
                 logged_in_users['username'] = email
+                logged_in_users['profile_picture_name'] = user['profile_picture'].decode()
             final_list.append(logged_in_users)
     return final_list

@@ -52,6 +52,7 @@
 
 .users {
   padding: 1.5rem;
+  overflow: auto;
   background-image: linear-gradient(to bottom, #44198800, #180930 40%);
   box-shadow: -10px -1px 10px 5px #1809305c;
   width: 300px;
@@ -198,28 +199,40 @@ ul {
   list-style: none; /* Remove default bullets */
 }
 
-ul li::before {
-  content: "\2022";  
-  color: #7597de;
-  font-weight: bold; 
-  font-size: 2.3rem;
-  display: inline-block; 
-  width: 0.7em; 
-  height: 0px;
+ul .buttonuser {
+  display: block;
+
+  margin-right: 1rem;
+  margin-top: 0.5rem;
+  padding: 0.1rem 0.3rem;
+  
+  font-size: 150%;
+  font-family: 'Poppins';
+  color: #ffffff;
+  background-color: #ffffff00;
+
+  border-radius: 0.5rem;
+
+  outline: none;
+  border: none;
+  cursor: pointer;
+  -webkit-transition: background-color 200ms ease in;
+  transition: color .2s ease-in;
 }
 
-li:hover {
-  color: #7597de;
+ul .buttonuser:hover {
+  color: #cecece;
   text-decoration: none;
 }
 
-li:link {
+ul .buttonuser:link {
   text-decoration: none;
 }
 
-li:visited {
+.buttonuser:visited {
   text-decoration: none;
 }
+
 
 /*---------------Team Logo-------------*/
 header .team {
@@ -364,6 +377,15 @@ section img#moon {
     mix-blend-mode: screen;
 }
 
+section img#kitty {
+  position: relative;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+  height: auto;
+  width: 40px;
+  background-color: #ffffff;
+  z-index: 1;
+}
 /* Custom Scrollbar
    ==========================================================================
 */

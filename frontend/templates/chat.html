@@ -37,7 +37,8 @@
                     <div class = "online_users">
                         <ul>
                             {{loop}}
-                                <li>{{username}}</li>
+                                <button class = "buttonuser" onclick = "pop('{{username}}')">
+                                <img src = "/frontend/static/{{profile_picture_name}}" id = "kitty">{{username}}</button>
                             {{end_loop}}
                         </ul>
                     </div>
@@ -65,4 +66,10 @@
 
         </section>
     </body>
+    <script>
+        function pop(username) {
+            message = "Private message " + username + ":";
+            prompt(message, "");
+        }
+    </script>
 </html>
