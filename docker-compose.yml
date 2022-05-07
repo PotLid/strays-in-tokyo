@@ -4,6 +4,8 @@ services:
   mongo:
     image: mongo:5.0.6
   app:
+    depends_on:
+      - mongo
     build: .
     environment:
       WAIT_HOSTS: mongo:27017
