@@ -9,7 +9,7 @@ from backend.RequestHandling import GETrequests, POSTrequests, PUTrequests, DELE
 class MyTCPHandler(socketserver.BaseRequestHandler):
 
     # Creating a pymongo client
-    MongoClient = MongoClient('localhost', 27017)
+    MongoClient = MongoClient('mongo', 27017)
 
     # Important: In MongoDB, a database is not created until it gets content!
     mydb = MongoClient["312Project"]
@@ -51,11 +51,11 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
     def handle(self):
 
         # This will store all of the data with or without buffers.
-        data = b''            
+        data = b''
 
         #Get the initial data from the client, this will be the headers
         received_data = self.request.recv(1024)
-        
+
         print("{} sent:".format(self.client_address[0]))
         print(received_data, '\n')
 
@@ -63,9 +63,9 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
         parser = parseContentLength(received_data)
         # Get the Content Length from the returned dictionary
         self.Content_Length = parser['Content-Length']
-    
+
         data += received_data
-        
+
         # If the body length is greater than 0, then we will add the Body to the existing data
         if parser['Body-Length'] > 0:
             self.buffer_length = parser['Body-Length']
@@ -80,7 +80,7 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
                 # If we have reached the Content Length, we will break out the While Loop
                 if self.buffer_length >= self.Content_Length:
                     break
-        # If the length of the recieved data is 0, we don't handle anything  
+        # If the length of the recieved data is 0, we don't handle anything
         if len(data) == 0:
             return
 
