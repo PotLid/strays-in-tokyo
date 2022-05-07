@@ -4,7 +4,7 @@ import json
 import socketserver
 import pymongo
 from backend.websocketHandler import handleWebSocket
-from backend.userHandling import authenticatedUser, handleVisit, authenticateXSRF, retrieveAuthenticationCookieId, handleLogout, retrieveProfilePicture
+from backend.userHandling import authenticatedUser, handleVisit, authenticateXSRF, retrieveAuthenticationCookieId, handleLogout, retrieveProfilePicture, onlineUsers
 import server
 import os
 from backend import websocketHandler
@@ -119,8 +119,10 @@ def handle(TCP, path, data):
             xsrf_token = handleVisit(TCP, data, authenticated)
             print("This is the XSRF token: ", xsrf_token)
             if authenticated != None and authenticated != "":
+                online_users = onlineUsers()
+                print("These are all of the online users so far: ", online_users)
                 content = render_template("frontend/templates/chat.html", {"xsrf_token":xsrf_token,
-                                                                            "loop_data": ''})
+                                                                            "loop_data": online_users})
                 content = server.MyTCPHandler.generate_http_response(TCP, content.encode(), "text/html; charset=utf-8", "200 OK")
                 TCP.request.sendall(content)
             else:
@@ -192,6 +194,7 @@ def render_template(html_filename, data):
     #endregion
 
 def replace_placeholders(template, data):
+    print("This is the data: ", data)
     #region...(Replace all placeholders in the HTML template)
     replaced_template = template
     for placeholder in data.keys():
