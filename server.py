@@ -18,7 +18,7 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
 
     '''
     The UserCollection will consist of the following keys:
-    {'email':email, 'authenticated_token': authenticated_token when they first sign in, 'authenticated_xsrf_token':xsrf_token, 'profile_picture':image_file}
+    {'email':email, 'salt':random_salt, 'hash': hashed_password, 'profile_picture':image_file,'authenticated_token': authenticated_token when they first sign in, 'authenticated_xsrf_token':xsrf_token}
     '''
     userCollection = mydb["Users"]
     '''
@@ -99,7 +99,7 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
         if request_type == b'GET':
             GETrequests.handle(self, request_path, data_to_handle)
         if request_type == b'POST':
-            POSTrequests.handle(self, request_path, data_to_handle[b'Body'])
+            POSTrequests.handle(self, request_path, data_to_handle)
         if request_type == b'PUT':
             PUTrequests.handle(self, request_path, data_to_handle[b'Body'])
         if request_type == b'DELETE':

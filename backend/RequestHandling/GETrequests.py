@@ -1,8 +1,10 @@
+import secrets
 import sys
 import json
 import socketserver
 import pymongo
 from backend.websocketHandler import handleWebSocket
+from backend.userHandling import authenticatedUser, handleVisit, authenticateXSRF, retrieveAuthenticationCookieId
 import server
 import os
 from backend import websocketHandler
@@ -17,7 +19,7 @@ The inputted data will be:
 def handle(TCP, path, data):
     print("This is the GET request path: ", path, '\n')
     print('This is the GET request data: ', data, '\n')
-    # Route for the homepage, AKA the index.html 
+    # Route for the homepage, AKA the homepage.html 
     if path == b'/':
         content = render_content("frontend/templates/homepage.html")
         content = server.MyTCPHandler.generate_http_response(TCP, content.encode(), "text/html; charset=utf-8", "200 OK")
@@ -68,6 +70,26 @@ def handle(TCP, path, data):
         content = server.MyTCPHandler.generate_http_response(TCP, content.encode(), "text/html; charset=utf-8", "200 OK")
         TCP.request.sendall(content)
 
+    elif path == b'/chatpage':
+        # We must add authentication to the chatapp page.
+        if b'Cookie' in data:
+            cookie_id = retrieveAuthenticationCookieId(data[b'Cookie'])
+            authenticated = authenticatedUser(cookie_id)
+            print("This is the username: ", authenticated, '\n')
+            xsrf_token = handleVisit(TCP, data, authenticated)
+            print("This is the XSRF token: ", xsrf_token)
+            if authenticated != None and authenticated != "":
+                content = render_template("frontend/templates/chat.html", {"xsrf_token":xsrf_token,
+                                                                            "loop_data": ''})
+                content = server.MyTCPHandler.generate_http_response(TCP, content.encode(), "text/html; charset=utf-8", "200 OK")
+                TCP.request.sendall(content)
+        else:
+            Message = "You must log in to view this page"
+            LenOfMessage = len(Message)
+            NotFoundResponse = 'HTTP/1.1 403 Forbidden\r\nContent-Type: text/plain; charset=utf-8\r\nContent-Length: ' + str(LenOfMessage) + '\r\n\r\n' + Message
+            return TCP.request.sendall(NotFoundResponse.encode())
+
+
     elif path == b'/websocket':
         websocketHandler.websocket_request(TCP, data)
 
@@ -105,8 +127,53 @@ def handle(TCP, path, data):
         return TCP.request.sendall(response)
                 
 
+
+
+
 def render_content(html_filename: str):
     with open(html_filename) as html_file:
         content =  html_file.read()
         return content
 
+
+
+def render_template(html_filename, data):
+    #region...(Render the HTML template)
+    with open(html_filename) as html_file:
+        template = html_file.read()
+        template = replace_placeholders(template, data)
+        template = render_loop(template, data)
+        return template
+    #endregion
+
+def replace_placeholders(template, data):
+    #region...(Replace all placeholders in the HTML template)
+    replaced_template = template
+    for placeholder in data.keys():
+        if isinstance(data[placeholder], str):
+            replaced_template = replaced_template.replace("{{"+placeholder+"}}", data[placeholder])
+    return replaced_template
+    #endregion
+
+def render_loop(template, data):
+    #region...(Going through the html template loop)
+    if "loop_data" in data:
+        loop_start_tag = "{{loop}}"
+        loop_end_tag =  "{{end_loop}}"
+
+        start_index = template.find(loop_start_tag)
+        end_index = template.find(loop_end_tag)
+
+        loop_template = template[start_index + len(loop_start_tag): end_index]
+        loop_data = data["loop_data"]
+        loop_content = ""
+        for single_piece_of_content in loop_data:
+            loop_content += replace_placeholders(loop_template, single_piece_of_content)
+        final_content = template[:start_index] + loop_content + template[end_index+len(loop_end_tag):]
+        return final_content
+    #endregion
+
+def escape_html(input):
+    #region...(Removing any HTML characters; for Security reasons)
+    return input.replace(b'&', b'&amp;').replace(b'<', b'&lt;').replace(b'>', b'&gt;')
+    #endregion

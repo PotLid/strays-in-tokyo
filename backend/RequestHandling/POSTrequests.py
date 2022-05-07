@@ -30,7 +30,23 @@ def handle(TCP, path, data):
     if path == b'/settings':
        backend.userHandling.parse(TCP, path, data)
 
-    ###########################################################################
+    if path == b'/chatpage':
+        print("This is the data that was submitted in the chatapp: ", data)
+        # Handle XSRF authentication
+        validate_xsrf_token = backend.userHandling.parse(TCP, path, data)
+        # If the xsrf_token doesn't match anything the database, we return a 403 Forbidden
+        if validate_xsrf_token == False:
+            # Return 403 Forbidden
+            Message = "This XSRF token does not belong to this user"
+            LenOfMessage = len(Message)
+            NotFoundResponse = 'HTTP/1.1 403 Forbidden\r\nContent-Type: text/plain; charset=utf-8\r\nContent-Length: ' + str(LenOfMessage) + '\r\n\r\n' + Message
+            return TCP.request.sendall(NotFoundResponse.encode())
+
+        # If the xsrf_token exists in the database, we simply redirect them back to the chatapp page
+        RedirectResponse = 'HTTP/1.1 301 Moved Permanently\r\nContent-Type: text/plain\r\nContent-Length: 0\r\nLocation: /chatpage\r\n\r\n'
+        return TCP.request.sendall(RedirectResponse.encode())
+
+    ##########################################################################################
 
     if path == b'/users' or path == b'/users/':
         # body of the request is a JSON object with email and username fields
