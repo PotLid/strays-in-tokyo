@@ -1,5 +1,7 @@
+import hashlib
 import bcrypt
 import server
+import secrets
 
 '''
 This file will handle all of the User Authentication and Handling.
@@ -20,21 +22,24 @@ Profile Picture:
 
 
 def parse(TCP, path, body):
+    print("This is the current path: ", path)
+    print("This is the current body on line 26: ", body)
+    actual_body = body[b'Body']
     #region...(Parsing the MultiFormData)
-    Split = body.find(b'\r\n')
+    Split = actual_body.find(b'\r\n')
 
     # Isolate the Multi-Form data boundaries 
-    Border = body[:Split]
+    Border = actual_body[:Split]
     
     # Split all instances of a border to isolate the message and image
-    SplitBorders = body.split(Border)
+    SplitBorders = actual_body.split(Border)
     
     email = b''
     password = b''
     confirm_password = b''
     message = b''
     profile_picture_filename = b''
-    xsrf_token = ""
+    xsrf_token = b''
 
     for data in SplitBorders:
 
@@ -69,19 +74,21 @@ def parse(TCP, path, body):
         # For identifying the xsrf tokens
         if b'form-data; name="xsrf_token"' in data:
             find_xsrf_token = data.find(b'\r\n\r\n')
-            xsrf_token = data[find_xsrf_token+4:len(data)-2].decode()
+            xsrf_token = data[find_xsrf_token+4:len(data)-2]
 
     print("email is: ", email, '\n')
     print("password is: ", password, '\n')
     print("confirm password is: ", confirm_password, '\n')
     print("Profile picture filename is: ", profile_picture_filename, '\n')
-
+    print("Comment is: ", message, '\n')
     if path == b'/login':
         handleLogin(TCP, email, password)
     if path == b'/register':
         handleRegistration(TCP, email, password, confirm_password)
     if path == b'/settings':
         handleProfilePicture(TCP, profile_picture_filename)
+    if path == b'/chatpage':
+        return authenticateXSRF(TCP, body, xsrf_token)
 
 '''
 When a user sends a registration request, store their username and a salted hash of their password in your database.
@@ -101,7 +108,7 @@ def handleRegistration(TCP, email, password, confirm_password):
         password = password + random_salt
         # Hash the passcode
         hashed = bcrypt.hashpw(password, random_salt)
-        server.MyTCPHandler.userCollection.insert_one({'email': email, 'hash': hashed})
+        server.MyTCPHandler.userCollection.insert_one({'email': email, 'salt':random_salt, 'hash': hashed, 'profile_picture':b'kitty.png', 'authenticated_token':b'', "authenticated_xsrf_token":b''})
         # Redirect to the homepage after registering
         RedirectResponse = 'HTTP/1.1 301 Moved Permanently\r\nContent-Type: text/plain\r\nContent-Length: 0\r\nLocation: /login\r\n\r\n'
         return TCP.request.sendall(RedirectResponse.encode())
@@ -123,6 +130,49 @@ def handleLogin(TCP, email, password):
     print("We are now handling the login")
     print("##########################", '\n')
 
+    # Retrieve the user info from when they registered.
+    user_info = server.MyTCPHandler.userCollection.find_one({'email':email})
+    print("This is the current user info: ", user_info)
+    if len(user_info) != 0:
+        user_authentication_token = user_info['authenticated_token']
+        # Check to make sure that the inputted password matches the hashed password in the database.
+        user_salt = user_info['salt']
+        password += user_salt
+        hashed_passcode = bcrypt.hashpw(password, user_salt)
+        if hashed_passcode == user_info['hash']:
+            print("Login successful", '\n')
+            # Setting up the hashed authentication token id for the cookie
+            authentication_token = secrets.token_urlsafe()
+            hashed_authenticated_token = hashlib.sha256(authentication_token.encode()).digest()
+            # Add the hashed authentication token to the database if they have never signed in before and redirect to the chat page
+            if len(user_authentication_token) == 0:
+                
+                server.MyTCPHandler.userCollection.update_one({'email':email}, {"$set":{"authenticated_token":hashed_authenticated_token}})
+                # Redirect to the chatpage after successfuly updating the database
+                RedirectResponse = 'HTTP/1.1 301 Moved Permanently\r\nContent-Type: text/plain\r\nContent-Length: 0\r\nSet-Cookie: id=' + str(authentication_token) + '; Max-Age=3600' + '; HttpOnly' + '\r\nLocation: /chatpage\r\n\r\n'
+                return TCP.request.sendall(RedirectResponse.encode())
+
+            # Update the hashed authentication token to the database if they signed in before and redirect to the chat page
+            if len(user_authentication_token) != 0:
+                print("They logged in again", '\n')
+                print("This is the new authentication token: ", authentication_token, '\n')
+                server.MyTCPHandler.userCollection.update_one({'email':email}, {"$set":{"authenticated_token":hashed_authenticated_token}})
+                # Redirect to the chatpage after successfuly updating the database and cookie
+                RedirectResponse = 'HTTP/1.1 301 Moved Permanently\r\nContent-Type: text/plain\r\nContent-Length: 0\r\nSet-Cookie: id=' + str(authentication_token) + '; Max-Age=3600' + '; HttpOnly' + '\r\nLocation: /chatpage\r\n\r\n'
+                return TCP.request.sendall(RedirectResponse.encode())
+        else:
+            # If the password is incorrect, we will just keep redirecting them to the login page
+            RedirectResponse = 'HTTP/1.1 301 Moved Permanently\r\nContent-Type: text/plain\r\nContent-Length: 0\r\nLocation: /login\r\n\r\n'
+            return TCP.request.sendall(RedirectResponse.encode())
+
+    else:
+        # If there is no such user, we will just keep redirecting them to the login page
+        RedirectResponse = 'HTTP/1.1 301 Moved Permanently\r\nContent-Type: text/plain\r\nContent-Length: 0\r\nLocation: /login\r\n\r\n'
+        return TCP.request.sendall(RedirectResponse.encode())
+
+    
+
+
 '''
 Handling the Profile Picture:
     - When handling the profile picture, the user must have submitted something.
@@ -136,13 +186,63 @@ def handleProfilePicture(TCP, profile_picture_filename):
 
 
 
-def authenticateXSRF(TCP, xsrf_token):
+def authenticateXSRF(TCP, body, xsrf_token):
     print("##########################")
     print("We are now handling the xsrf")
     print("##########################", '\n')
+    cookie_id = retrieveAuthenticationCookieId(body[b'Cookie'])
+    email = authenticatedUser(cookie_id)
 
-def retrieveAuthenticationToken(username):
+    get_db_xsrf_token = server.MyTCPHandler.userCollection.find_one({"email": email})
+    get_db_xsrf_token = get_db_xsrf_token['authenticated_xsrf_token']
+    print("This is the current xsrf token waiting to be validated: ", get_db_xsrf_token, '\n')
+    if get_db_xsrf_token != xsrf_token.decode():
+        return False
+
+    return True
+
+'''
+@ handleVisit will be ran every time someone makes a GET request to the chatapp page
+*** The User MUST be authenitcated (logged in) and MUST have a valid XSRF token
+- The returned result will be either the xsrf token being added
+'''
+def handleVisit(TCP, cookie_id, email):
     print("##########################")
-    print("We are now retrieving the authenticated token")
+    print("We are now handling the tokens")
     print("##########################", '\n')
+    xsrf_token = ""
 
+    if cookie_id != b'':
+                    
+        valid_xsrf_token = server.MyTCPHandler.userCollection.find_one({"email": email})
+        print("Valid xsrf token: ", valid_xsrf_token, '\n')
+        if len(valid_xsrf_token) != None:
+            xsrf_token = valid_xsrf_token["authenticated_xsrf_token"]
+            if len(email) != 0 and xsrf_token != b'':
+                print("Adding to the database since the user is refreshing the page")
+                return xsrf_token
+            if len(email) != 0 and xsrf_token == b'':
+                xsrf_token = secrets.token_urlsafe()
+                print("This is the xsrf for the authenticated user when they first visit: ", xsrf_token, '\n')
+                server.MyTCPHandler.userCollection.update_one({"email": email}, {"$set":{"authenticated_xsrf_token": xsrf_token}})
+                return xsrf_token
+
+    return ""
+
+
+def authenticatedUser(cookie_id):
+    hashed_token = hashlib.sha256(cookie_id).digest()
+    user_info = server.MyTCPHandler.userCollection.find_one({'authenticated_token':hashed_token})
+    print("Line 232 user info: ", user_info, '\n')
+    if len(user_info) != 0:
+        return user_info['email']
+    return ""
+
+def retrieveAuthenticationCookieId(cookie_data):
+    print("This is the cookie data: ", cookie_data, '\n')
+    if b'id' in cookie_data:
+        beginning_cookie_id = cookie_data.find(b"=")+1
+        return cookie_data[beginning_cookie_id:]
+
+    return None
+    
