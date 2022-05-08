@@ -56,7 +56,7 @@
                     <div class = "footer">
                         <form action="/chatpage" id="chat-form" method="post" enctype="multipart/form-data">
                             <input value="{{xsrf_token}}" name="xsrf_token" hidden>
-                            <input type = "text" name = "comment">
+                            <input autocomplete = "off" type = "text" name = "comment">
                             <button> SEND </button>
                         </form>
                     </div>
