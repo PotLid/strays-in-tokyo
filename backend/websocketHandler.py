@@ -67,6 +67,7 @@ def handleWebSocket(TCP: MyTCPHandler, username):
         opcode = first_int & 15
         if opcode == 8:
             # delete socket connection
+            TCP.websocket_connections.remove({'username':username, 'socket':TCP})
             break
 
         i += 1
@@ -125,35 +126,36 @@ def handleWebSocket(TCP: MyTCPHandler, username):
 
         payload_as_json = json.loads(payload_data)
      
-     
+       
+        
+        if payload_as_json['messageType'] == 'user_to_server': 
+            timeID = payload_as_json['id']
+            json_message = {'messageType': 'server_to_user', 'sender': username, 'id': timeID, 'comment': payload_as_json['comment'] }
+
         # Likes and Dislikes Functionality
         # json message {'messageType': 'like', 'id': unique_time_stamp }
-        if payload_as_json['messageType'] == 'like':  
-            timeID = client['id']
-            # updates postLikes DB element ({'id': unique_time_stamp, 'sender': username, 'comment': comment,  'likes': 0 (int)}) with incremented like count
+        elif payload_as_json['messageType'] == 'like':  
+            timeID = payload_as_json['id']
+            # updates postInfo DB element ({'id': unique_time_stamp, 'sender': username, 'comment': comment,  'likes': 0 (int)}) with incremented like count
             # (returns element with updated likes without '_id' attribute if needed)
-            updatedElem = postLikes.find_one_and_update({'timestamp' : timeID}, {'$inc' : {'likes': 1}}, {'_id' : False}, new = True)            
+            updatedElem = postInfo.find_one_and_update({'timestamp' : timeID}, {'$inc' : {'likes': 1}}, {'_id' : False}, new = True)            
             # parse return Frame
-            retMsg = {'messageType': 'like_update', 'id': timeID, 'totalLike': updatedElem['likes']}
-            bytemsg = json.dumps(retMsg).encode()
-            webFrame = convert_webframe(bytemsg) # parse webframe function
+            json_message = {'messageType': 'like_update', 'id': timeID, 'totalLike': updatedElem['likes']}
 
-          
         elif payload_as_json['messageType'] == 'dislike':
-            timeID = client['id']
-            # updates postLikes DB element with decremented like count
+            timeID = payload_as_json['id']
+            # updates postInfo DB element with decremented like count
             # (returns element with updated likes without '_id' attribute if needed)
-            updatedElem = postLikes.find_one_and_update({'timestamp' : timeID}, {'$inc' : {'likes': -1}}, {'_id' : False}, new = True)
+            updatedElem = postInfo.find_one_and_update({'timestamp' : timeID}, {'$inc' : {'likes': -1}}, {'_id' : False}, new = True)
             # parse return Frame
-            retMsg = {'messageType': 'like_update', 'id': timeID, 'totalLike': updatedElem['likes']}
-            bytemsg = json.dumps(retMsg).encode()
-            webFrame = convert_webframe(bytemsg) # parse webframe function
+            json_message = {'messageType': 'like_update', 'id': timeID, 'totalLike': updatedElem['likes']}
+
         
      
         # SUBJECT TO CHANGE
-#         json_message = {'messageType': 'chatMessage', 'username': username, 'comment': payload_as_json['comment'] }
-#         message_as_bytes = json.dumps(json_message).encode()
-#         webframe = convert_webframe(TCP, message_as_bytes)
+        message_as_bytes = json.dumps(json_message).encode()
+        webframe = convert_webframe(TCP, message_as_bytes)
+     
         for client in TCP.websocket_connections:
             client['socket'].request.sendall(webframe)
         data = b''
@@ -162,7 +164,7 @@ def handleWebSocket(TCP: MyTCPHandler, username):
 
 
 def websocket_request(TCP: MyTCPHandler, Headers):
-    key = Headers[b'Sec-WebSocket-Key']
+    key = Headers[b'Sec-WebSocket-Key'].decode()
     accept = compute_accept(key)
     response = generate_socket_response('101 Switching Protocols', accept)
     TCP.request.sendall(response)
