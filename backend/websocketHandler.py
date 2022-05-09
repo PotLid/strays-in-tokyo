@@ -124,11 +124,36 @@ def handleWebSocket(TCP: MyTCPHandler, username):
         payload_data = TCP.escape_html(payload_data)
 
         payload_as_json = json.loads(payload_data)
+     
+     
+        # Likes and Dislikes Functionality
+        # json message {'messageType': 'like', 'id': unique_time_stamp }
+        if payload_as_json['messageType'] == 'like':  
+            timeID = client['id']
+            # updates postLikes DB element ({'id': unique_time_stamp, 'sender': username, 'comment': comment,  'likes': 0 (int)}) with incremented like count
+            # (returns element with updated likes without '_id' attribute if needed)
+            updatedElem = postLikes.find_one_and_update({'timestamp' : timeID}, {'$inc' : {'likes': 1}}, {'_id' : False}, new = True)            
+            # parse return Frame
+            retMsg = {'messageType': 'like_update', 'id': timeID, 'totalLike': updatedElem['likes']}
+            bytemsg = json.dumps(retMsg).encode()
+            webFrame = convert_webframe(bytemsg) # parse webframe function
 
+          
+        elif payload_as_json['messageType'] == 'dislike':
+            timeID = client['id']
+            # updates postLikes DB element with decremented like count
+            # (returns element with updated likes without '_id' attribute if needed)
+            updatedElem = postLikes.find_one_and_update({'timestamp' : timeID}, {'$inc' : {'likes': -1}}, {'_id' : False}, new = True)
+            # parse return Frame
+            retMsg = {'messageType': 'like_update', 'id': timeID, 'totalLike': updatedElem['likes']}
+            bytemsg = json.dumps(retMsg).encode()
+            webFrame = convert_webframe(bytemsg) # parse webframe function
+        
+     
         # SUBJECT TO CHANGE
-        json_message = {'messageType': 'chatMessage', 'username': username, 'comment': payload_as_json['comment'] }
-        message_as_bytes = json.dumps(json_message).encode()
-        webframe = convert_webframe(TCP, message_as_bytes)
+#         json_message = {'messageType': 'chatMessage', 'username': username, 'comment': payload_as_json['comment'] }
+#         message_as_bytes = json.dumps(json_message).encode()
+#         webframe = convert_webframe(TCP, message_as_bytes)
         for client in TCP.websocket_connections:
             client['socket'].request.sendall(webframe)
         data = b''
