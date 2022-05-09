@@ -5,6 +5,10 @@ let wc_connection;
 
 console.log('testing js')
 
+// CLick on user_name => getting id (event listener to create element, and send message)
+
+
+
 //
 // function onEnter(e) {
 //     if(e.code === 'Enter') {
@@ -30,19 +34,19 @@ console.log('testing js')
 // }
 //
 // // called when the page loads to get the chat_history
-// function get_chat_history() {
-//     const request = new XMLHttpRequest();
-//     request.onreadystatechange = function () {
-//         if (this.readyState === 4 && this.status === 200) {
-//             const messages = JSON.parse(this.response);
-//             for (const message of messages) {
-//                 addMessage(message);
-//             }
-//         }
-//     };
-//     request.open("GET", "/chat-history");
-//     request.send();
-// }
+function get_chat_history() {
+    const request = new XMLHttpRequest();
+    request.onreadystatechange = function () {
+        if (this.readyState === 4 && this.status === 200) {
+            const messages = JSON.parse(this.response);
+            for (const message of messages) {
+                addMessage(message);
+            }
+        }
+    };
+    request.open("GET", "/chat-history");
+    request.send();
+}
 //
 //
 // // Called whenever data is received from the server over the WebSocket connection
@@ -112,10 +116,10 @@ console.log('testing js')
 //
 // }
 //
-// function chat_history() {
-//
-//     get_chat_history()
-//
-//     // use this line to start your video without having to click a button. Helpful for debugging
-//     // startVideo();
-// }
+function chat_init() {
+
+    get_chat_history()
+
+    // use this line to start your video without having to click a button. Helpful for debugging
+    // startVideo();
+}
