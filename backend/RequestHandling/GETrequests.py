@@ -19,12 +19,12 @@ The inputted data will be:
 def handle(TCP, path, data):
     print("This is the GET request path: ", path, '\n')
     print('This is the GET request data: ', data, '\n')
-    # Route for the homepage, AKA the homepage.html 
+    # Route for the homepage, AKA the homepage.html
     if path == b'/':
         content = render_content("frontend/templates/homepage.html")
         content = server.MyTCPHandler.generate_http_response(TCP, content.encode(), "text/html; charset=utf-8", "200 OK")
         TCP.request.sendall(content)
-    
+
     elif b'.jpg' in path:
         path = path[1:].decode()
         Exist = os.path.exists(path)
@@ -36,7 +36,7 @@ def handle(TCP, path, data):
             JPGresponse = JPGresponse.encode()
             JPGresponse += readJPG
             TCP.request.sendall(JPGresponse)
-    
+
     elif b'.png' in path:
         path = path[1:].decode()
         Exist = os.path.exists(path)
@@ -61,8 +61,8 @@ def handle(TCP, path, data):
             CSSresponse += readCSS.decode()
             TCP.request.sendall(CSSresponse.encode())
 
-    elif path == b'/functions.js':
-        content = render_content("functions.js")
+    elif path == b'/javascript/chat.js':
+        content = render_content("frontend/javascript/chat.js")
         content = server.MyTCPHandler.generate_http_response(TCP, content.encode(), "text/javascript; charset=utf-8", "200 OK")
         TCP.request.sendall(content)
 
@@ -70,10 +70,10 @@ def handle(TCP, path, data):
         content = render_content("frontend/templates/login.html")
         content = server.MyTCPHandler.generate_http_response(TCP, content.encode(), "text/html; charset=utf-8", "200 OK")
         TCP.request.sendall(content)
-    
+
     elif path == b'/logout':
         handleLogout(data[b'Cookie'])
-        # If the user has logged out, redirect them back to the home page 
+        # If the user has logged out, redirect them back to the home page
         RedirectResponse = 'HTTP/1.1 301 Moved Permanently\r\nContent-Type: text/plain\r\nContent-Length: 0\r\nLocation: /\r\n\r\n'
         return TCP.request.sendall(RedirectResponse.encode())
 
@@ -108,7 +108,7 @@ def handle(TCP, path, data):
             LenOfMessage = len(Message)
             NotFoundResponse = 'HTTP/1.1 403 Forbidden\r\nContent-Type: text/plain; charset=utf-8\r\nContent-Length: ' + str(LenOfMessage) + '\r\n\r\n' + Message
             return TCP.request.sendall(NotFoundResponse.encode())
-    
+
 
     elif path == b'/chatpage':
         # We must add authentication to the chatapp page.
@@ -143,7 +143,7 @@ def handle(TCP, path, data):
 
     elif path == b'/users':
         # GET /users
-        
+
         data = server.MyTCPHandler.userCollection.find({}, {"_id": False})
 
         json_object = json.dumps((list(data)))
@@ -154,25 +154,25 @@ def handle(TCP, path, data):
     elif path.startswith(b'/users/'):
         # GET /users/{id}
         id = str(path.split(b'/')[-1])
-        
+
         if id.isnumeric():
-            
+
             id_object = server.MyTCPHandler.userCollection.find_one({'id': int(id)}, {"_id": False})
-            
+
             if id_object:
                 json_object = json.dumps(id_object)
 
                 response = server.MyTCPHandler.generate_http_response(TCP, json_object.encode(), 'application/json; charset=utf-8', '200 OK')
                 return TCP.request.sendall(response)
-    
+
     # If path is not as expected.
     else:
         body = "The requested content was not found."
 
         response = server.MyTCPHandler.generate_http_response(TCP, body.encode(), 'text/plain; charset=utf-8', '404 Not Found')
-        
+
         return TCP.request.sendall(response)
-                
+
 
 
 

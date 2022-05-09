@@ -12,7 +12,7 @@
         <section>
             <header>
                 <h1 class = "team"> Team Strays in Tokyo </h1>
-                
+
                 <ul>
                     <a button class = "buttonchat" href = "/chatpage" >Chat</button></a>
 
@@ -52,7 +52,7 @@
                             <p class = "user_message"> What's up? </p>
                         </div>
                     </div>
-                
+
                     <div class = "footer">
                         <form action="/chatpage" id="chat-form" method="post" enctype="multipart/form-data">
                             <input value="{{xsrf_token}}" name="xsrf_token" hidden>
@@ -65,11 +65,6 @@
             </div>
 
         </section>
+        <script src="./javascript/chat.js"></script>
     </body>
-    <script>
-        function pop(username) {
-            message = "Private message " + username + ":";
-            prompt(message, "");
-        }
-    </script>
 </html>
