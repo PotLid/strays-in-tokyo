@@ -27,12 +27,12 @@ console.log('testing js')
 //     }
 // }
 //
-// // Renders a new chat message to the page
-// function addMessage(chatMessage) {
-//     let chat = document.getElementById('chat');
-//     chat.innerHTML += "<b>" + chatMessage['username'] + "</b>: " + chatMessage["comment"] + "<br/>";
-// }
-//
+// Renders a new chat message to the page
+function addMessage(chatMessage) {
+    let chat = document.getElementById('chat');
+    chat.innerHTML += "<b>" + chatMessage['username'] + "</b>: " + chatMessage["comment"] + "<br/>";
+}
+
 // // called when the page loads to get the chat_history
 function get_chat_history() {
     const request = new XMLHttpRequest();
