@@ -48,16 +48,16 @@
 
                     <div class = "container3">
                         <div class = "body" id="chat-body">
-                            <p class = "message"> Hello </p>
-                            <p class = "user_message"> What's up? </p>
+<!--                            <p class = "message"> Hello </p>-->
+<!--                            <p class = "user_message"> What's up? </p>-->
                         </div>
                     </div>
 
                     <div class = "footer">
                         <form action="/chatpage" id="chat-form" method="post" enctype="multipart/form-data">
                             <input value="{{xsrf_token}}" name="xsrf_token" hidden>
-                            <input autocomplete = "off" type = "text" name = "comment">
-                            <button> SEND </button>
+                            <input id="chat-comment" autocomplete = "off" type = "text" name = "comment">
+                            <button onclick="onEnter()"> SEND </button>
                         </form>
                     </div>
 

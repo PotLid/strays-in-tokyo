@@ -1,6 +1,5 @@
 // Handshake for the webSocket
-// const socket = new WebSocket('ws://' + window.location.host + '/websocket');
-const socket = new WebSocket('ws://' +  'websocket');
+const socket = new WebSocket('ws://' + window.location.host + '/websocket');
 
 let wc_connection;
 
@@ -29,6 +28,10 @@ function sendMessage() {
         socket.send(JSON.stringify(payload));
     }
 }
+
+// Message Format for the chat
+// <p className="message"> Hello </p>
+// <p className="user_message"> What's up? </p>
 
 // Renders a new chat message to the page
 function addMessage(chatMessage) {
@@ -69,10 +72,14 @@ socket.onmessage = function (ws_message) {
             break;
 
         case 'like_update':
-        //    Doing function that find message with corresponding id then update
+            //  Doing function that find message with corresponding id then update
 
             break;
 
+        case 'dm':
+            //  Manage the DM
+
+            break;
 
 
         default:
