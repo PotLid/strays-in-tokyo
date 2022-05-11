@@ -132,32 +132,42 @@ def handleWebSocket(TCP: MyTCPHandler, username):
             timeID = payload_as_json['id']
             json_message = {'messageType': 'server_to_user', 'sender': username, 'id': timeID, 'comment': payload_as_json['comment'] }
 
-        # Likes and Dislikes Functionality
-        # json message {'messageType': 'like', 'id': unique_time_stamp }
+            # create message for database storage
+            db_message = {'sender': username, 'receiver': None, 'messageType': 'user_to_server','id': timeID, 'comment': payload_as_json['comment'], 'totalLike':0}
+            TCP.chatCollection.insert_one(db_message)
+
+            message_as_bytes = json.dumps(json_message).encode()
+            webframe = convert_webframe(TCP, message_as_bytes)
+        
+            for client in TCP.websocket_connections:
+                client['socket'].request.sendall(webframe)
+ 
         elif payload_as_json['messageType'] == 'like':  
             timeID = payload_as_json['id']
             # updates postInfo DB element ({'id': unique_time_stamp, 'sender': username, 'comment': comment,  'likes': 0 (int)}) with incremented like count
             # (returns element with updated likes without '_id' attribute if needed)
-            updatedElem = postInfo.find_one_and_update({'timestamp' : timeID}, {'$inc' : {'likes': 1}}, {'_id' : False}, new = True)            
+            updatedElem = TCP.chatCollection.find_one_and_update({'id' : timeID}, {'$inc' : {'totalLike': 1}}, {'_id' : False}, new = True)            
             # parse return Frame
-            json_message = {'messageType': 'like_update', 'id': timeID, 'totalLike': updatedElem['likes']}
+            json_message = {'messageType': 'like_update', 'id': timeID, 'totalLike': updatedElem['totalLike']}
 
+            message_as_bytes = json.dumps(json_message).encode()
+            webframe = convert_webframe(TCP, message_as_bytes)
+        
+            for client in TCP.websocket_connections:
+                client['socket'].request.sendall(webframe)
         elif payload_as_json['messageType'] == 'dislike':
             timeID = payload_as_json['id']
             # updates postInfo DB element with decremented like count
             # (returns element with updated likes without '_id' attribute if needed)
-            updatedElem = postInfo.find_one_and_update({'timestamp' : timeID}, {'$inc' : {'likes': -1}}, {'_id' : False}, new = True)
+            updatedElem = TCP.chatCollection.find_one_and_update({'id' : timeID}, {'$inc' : {'totalLike': -1}}, {'_id' : False}, new = True)
             # parse return Frame
-            json_message = {'messageType': 'like_update', 'id': timeID, 'totalLike': updatedElem['likes']}
+            json_message = {'messageType': 'like_update', 'id': timeID, 'totalLike': updatedElem['totalLike']}
 
+            message_as_bytes = json.dumps(json_message).encode()
+            webframe = convert_webframe(TCP, message_as_bytes)
         
-     
-        # SUBJECT TO CHANGE
-        message_as_bytes = json.dumps(json_message).encode()
-        webframe = convert_webframe(TCP, message_as_bytes)
-     
-        for client in TCP.websocket_connections:
-            client['socket'].request.sendall(webframe)
+            for client in TCP.websocket_connections:
+                client['socket'].request.sendall(webframe)
         data = b''
 
     return 
