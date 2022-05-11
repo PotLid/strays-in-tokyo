@@ -119,9 +119,14 @@ def handle(TCP: server.MyTCPHandler, path, data):
             xsrf_token = handleVisit(TCP, data, authenticated)
             print("This is the XSRF token: ", xsrf_token)
             if authenticated != None and authenticated != "":
-                last_needed_character =  authenticated.rfind(b'@')
-                username = authenticated[0:last_needed_character]
-                username = username.decode()
+                username = ''
+                if b'@' in authenticated:
+                    last_needed_character =  authenticated.rfind(b'@')
+                    username = authenticated[0:last_needed_character]
+                    username = username.decode()
+                if b'@' not in authenticated:
+                    username = authenticated.decode()
+                    
                 online_users = onlineUsers()
                 print("These are all of the online users so far: ", online_users)
                 content = render_template("frontend/templates/chat.html", {"xsrf_token":xsrf_token,
