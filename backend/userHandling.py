@@ -149,7 +149,7 @@ def handleLogin(TCP, email, password):
             hashed_authenticated_token = hashlib.sha256(authentication_token.encode()).digest()
             # Add the hashed authentication token to the database if they have never signed in before and redirect to the chat page
             if len(user_authentication_token) == 0:
-                
+
                 server.MyTCPHandler.userCollection.update_one({'email':email}, {"$set":{"authenticated_token":hashed_authenticated_token}})
                 # Redirect to the chatpage after successfuly updating the database
                 RedirectResponse = 'HTTP/1.1 301 Moved Permanently\r\nContent-Type: text/plain\r\nContent-Length: 0\r\nSet-Cookie: id=' + str(authentication_token) + '; Max-Age=3600' + '; HttpOnly' + '\r\nLocation: /chatpage\r\n\r\n'
@@ -259,9 +259,16 @@ def authenticatedUser(cookie_id):
 
 def retrieveAuthenticationCookieId(cookie_data):
     print("This is the cookie data: ", cookie_data, '\n')
-    if b'id' in cookie_data:
-        beginning_cookie_id = cookie_data.find(b"=")+1
-        return cookie_data[beginning_cookie_id:]
+    if b";" in cookie_data:
+        split_data = cookie_data.split(b';')
+        for value in split_data:
+            if b'id' in value:
+                beginning_cookie_id = value.find(b"=")+1
+                return value[beginning_cookie_id:]
+    if b';' not in cookie_data:
+        if b'id' in cookie_data:
+                beginning_cookie_id = cookie_data.find(b"=")+1
+                return cookie_data[beginning_cookie_id:]
 
     return None
 

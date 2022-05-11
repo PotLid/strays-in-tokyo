@@ -119,11 +119,14 @@ def handle(TCP: server.MyTCPHandler, path, data):
             xsrf_token = handleVisit(TCP, data, authenticated)
             print("This is the XSRF token: ", xsrf_token)
             if authenticated != None and authenticated != "":
+                last_needed_character =  authenticated.rfind(b'@')
+                username = authenticated[0:last_needed_character]
+                username = username.decode()
                 online_users = onlineUsers()
                 print("These are all of the online users so far: ", online_users)
                 content = render_template("frontend/templates/chat.html", {"xsrf_token":xsrf_token,
                                                                             "loop_data": online_users})
-                content = server.MyTCPHandler.generate_http_response(TCP, content.encode(), "text/html; charset=utf-8", "200 OK")
+                content = generate_http_response(content.encode(), "text/html; charset=utf-8", "200 OK", username)
                 TCP.request.sendall(content)
             else:
                 Message = "You must log in to view this page"
@@ -231,3 +234,14 @@ def escape_html(input):
     #region...(Removing any HTML characters; for Security reasons)
     return input.replace(b'&', b'&amp;').replace(b'<', b'&lt;').replace(b'>', b'&gt;')
     #endregion
+
+
+# Generates a HTTP response in bytes
+def generate_http_response(body: bytes, content_type: str, response_code: str, username:str):
+    response = b'HTTP/1.1 ' + response_code.encode()
+    response += b'\r\nContent-Length: ' + str(len(body)).encode()
+    response += b'\r\nContent-Type: ' + content_type.encode()
+    response += b'\r\nSet-Cookie: username=' + username.encode() + b'; Max-Age=3600'
+    response += b'\r\n\r\n'
+    response += body
+    return response
