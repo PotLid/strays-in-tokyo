@@ -1,4 +1,5 @@
 from server import MyTCPHandler
+from userHandling import retrieveAuthenticationCookieId, authenticatedUser
 import random
 import json
 import hashlib
@@ -197,7 +198,9 @@ def websocket_request(TCP: MyTCPHandler, Headers):
     TCP.request.sendall(response)
 
     # SUBJECT TO CHANGE
-    username = "User" + str(random.randint(0,1000))
+    # username = "User" + str(random.randint(0,1000))
+    cookieID = retrieveAuthenticationCookieId(Headers[b'Cookies'])
+    username = authenticatedUser(cookieID).decode()
     TCP.websocket_connections.append({'username': username, 'socket': TCP})
 
     handleWebSocket(TCP, username)
