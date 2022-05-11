@@ -26,6 +26,12 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
     {'email':email, 'comment':comment}
     '''
     postCollection = mydb["Posts"]
+    '''
+    The chatCollection will consist of the following keys:
+    {'sender': username, 'receiver': username, 'messageType': messageType, 'id': unique_time_stamp, 'comment': comment, 'totalLike': 0}
+    '''
+    chatCollection = mydb['Chat']
+
 
     buffer_length = 0
     Content_Length = 0
@@ -45,7 +51,7 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
         return response
 
     # SUBJECT TO CHANGE
-    websocket_connections = {}
+    websocket_connections = []
 
 
     def handle(self):
