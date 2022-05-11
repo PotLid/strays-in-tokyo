@@ -140,6 +140,11 @@ def handle(TCP, path, data):
     elif path == b'/websocket':
         websocketHandler.websocket_request(TCP, data)
 
+    elif path == b'/chat-history':
+
+        response = {}
+
+        return TCP.request.sendall(response)
 
     elif path == b'/users':
         # GET /users
