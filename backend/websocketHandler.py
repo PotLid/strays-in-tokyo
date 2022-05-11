@@ -168,6 +168,23 @@ def handleWebSocket(TCP: MyTCPHandler, username):
         
             for client in TCP.websocket_connections:
                 client['socket'].request.sendall(webframe)
+        elif payload_as_json['messageType'] == 'dm':
+            timeID = payload_as_json['id']
+            sender = payload_as_json['sender']
+            receiver = payload_as_json['receiver']
+
+            json_message = payload_as_json
+
+            db_message = {'sender': sender, 'receiver': receiver, 'messageType': 'dm', 'id': timeID, 'comment': payload_as_json['comment'], 'totalLike':0}
+            TCP.chatCollection.insert_one(db_message)
+
+            message_as_bytes = json.dumps(json_message).encode()
+            webframe = convert_webframe(TCP, message_as_bytes)
+            # message will display only for the sender and the receiver of the message
+            for client in TCP.websocket_connections:
+                if client['username'] == sender or client['username'] == receiver:
+                    client['socket'].request.sendall(webframe)
+
         data = b''
 
     return 
