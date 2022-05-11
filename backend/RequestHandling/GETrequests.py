@@ -16,7 +16,7 @@ The inputted data will be:
     -- A dictionary with Key-Value pairs from the Header and Body (Byte encoded already)
     '''
 
-def handle(TCP, path, data):
+def handle(TCP: server.MyTCPHandler, path, data):
     print("This is the GET request path: ", path, '\n')
     print('This is the GET request data: ', data, '\n')
     # Route for the homepage, AKA the homepage.html
@@ -142,7 +142,8 @@ def handle(TCP, path, data):
 
     elif path == b'/chat-history':
 
-        response = {}
+        history = TCP.chatCollection.find({'messageType': 'user_to_server'}, {'_id': False})
+        response = TCP.generate_http_response(json.dumps(list(history)).encode(), 'application/json; charset=utf-8', '200 OK')
 
         return TCP.request.sendall(response)
 
