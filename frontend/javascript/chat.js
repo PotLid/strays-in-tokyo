@@ -73,7 +73,7 @@ function directMsg(el) {
     const temp_targetUser = el.getAttribute('data-target');
 
     if(temp_targetUser === username) {
-        alert('you can\'t send DM to yourself! idiot.')
+        alert('You can not DM yourself!')
         return;
     }
 
@@ -97,7 +97,7 @@ function directMsg(el) {
     // dm heading
     const dm_head = document.createElement('h2');
     dm_head.style.color = 'white';
-    dm_head.innerText = 'To. ' + targetUser;
+    dm_head.innerText = 'To: ' + targetUser;
 
     // dm wrap text box
     const dm_input = document.createElement('input');
@@ -106,12 +106,12 @@ function directMsg(el) {
 
     // dm send button
     const dm_send = document.createElement('button');
-    dm_send.innerText = 'send'
+    dm_send.innerText = 'Send'
     dm_send.addEventListener('click', sendDirectMsg)
 
     // dm close button
     const dm_close = document.createElement('button');
-    dm_close.innerText = 'close'
+    dm_close.innerText = 'Close'
     dm_close.addEventListener('click', closeDirectPrompt);
 
     dm_wrap.appendChild(dm_head)
@@ -180,7 +180,7 @@ function gotDirectMsg(message) {
     // dm heading
     const dm_head = document.createElement('h2');
     dm_head.style.color = 'white';
-    dm_head.innerText = 'From. ' + message['sender'];
+    dm_head.innerText = 'From: ' + message['sender'];
 
     // dm text
     const dm_text = document.createElement('p');

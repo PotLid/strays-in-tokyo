@@ -152,7 +152,7 @@ header {
   display: flex;
 }
 
-form input{
+input[type=text]{
   flex: 1;
   flex-direction: column;
   height: 40px;
@@ -164,31 +164,39 @@ form input{
 }
 
 
-/*---------------SEND button-------------*/
-form button{
-  margin-left: 1rem;
-  width: 100px;
-  font-size: 18px;
+/*---------------Like button-------------*/
+.like-wrap button{
+  text-indent: -9999px;
+  background-image: url(/frontend/static/up.png);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  white-space: nowrap;
+  margin-right: 0.5rem;
+  margin-top: -0.1rem;
+  width: 30px;
+  height: 30px;
   border: none;
   outline: none;
-  background-color:#180930;
+  background-color: #18093000;
   color: white;
   border-radius: 0.5rem;
   -webkit-transition: background-color 200ms ease in;
   transition: background-color .2s ease-in;
 }
 
-form button:hover {
-  background-color: #0f061e;
+.like-wrap button:hover {
+  background-color: #0f061e00;
+  transform: scale(1.25) perspective(1px);
   color: #ffffff;
   text-decoration: none;
 }
 
-form button:link {
+.like-wrap button:link {
   text-decoration: none;
 }
 
-form button:visited {
+.like-wrap button:visited {
   text-decoration: none;
 }
 
@@ -441,5 +449,52 @@ section img#kitty {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #490c61;
+  border-radius: 1rem;
+  background-color: #431988;
+}
+
+.dm-wrap button {
+  display: block;
+  float: right;
+
+  margin-top: 0.5rem;
+  padding: 0.75rem 2rem;
+
+  font-weight: 700;
+  font-size: 100%;
+  color: #2b1055;
+  background-color: #ffffff;
+
+  border-radius: 0.5rem;
+
+  outline: none;
+  border: none;
+  cursor: pointer;
+  -webkit-transition: background-color 200ms ease in;
+  transition: background-color .2s ease-in;
+}
+
+.dm-wrap button:hover {
+  background-color: #180930;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.dm-wrap button:link {
+  text-decoration: none;
+}
+
+.dm-wrap button:visited {
+  text-decoration: none;
+}
+
+.dm-wrap input[type=text] {
+  flex: 1;
+  flex-direction: column;
+  height: 40px;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  padding: 10px;
+  border-radius: 0.5rem;
 }
