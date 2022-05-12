@@ -205,7 +205,7 @@ ul .buttonuser {
   margin-right: 1rem;
   margin-top: 0.5rem;
   padding: 0.1rem 0.3rem;
-  
+
   font-size: 130%;
   font-family: 'Poppins';
   color: #ffffff;
@@ -253,7 +253,7 @@ header .buttonchat {
   margin-bottom: 1rem;
   margin-top: 0.5rem;
   padding: 0.75rem 2rem;
-  
+
   font-weight: 700;
   font-size: 120%;
   color: #2b1055;
@@ -292,7 +292,7 @@ header .buttonsettings {
   margin-bottom: 1rem;
   margin-top: 0.5rem;
   padding: 0.75rem 2rem;
-  
+
   font-weight: 700;
   font-size: 120%;
   color: #ffffff;
@@ -411,4 +411,12 @@ section img#kitty {
 
 ::-webkit-scrollbar-corner {
   background-color: transparent;
+}
+
+/* Custom */
+
+.like-wrap {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
 }

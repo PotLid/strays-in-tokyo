@@ -36,11 +36,36 @@ function sendMessage() {
 
     const payload = {'sender': username, 'messageType': 'user_to_server', 'id': id  ,'comment': comment}
 
-    console.log(payload)
-
     if (comment !== "") {
         socket.send(JSON.stringify(payload));
     }
+}
+
+// {'messageType': 'like', 'id': unique_time_stamp }
+function sendLike(e) {
+
+    // console.log(e.target.nextSibling)
+
+    // console.log(e.target.parentNode.parentElement)
+
+    const targetId = e.target.parentNode.parentNode.getAttribute('id-chat');
+
+    const payload = {'messageType': 'like', 'id': targetId};
+
+    // console.log(payload)
+
+    socket.send(JSON.stringify(payload));
+    // console.log('clicked like!')
+}
+
+function updateLike(message) {
+    const targetId = message['id'];
+
+    // console.log(targetId)
+
+    const targetEl = document.getElementById(`count-${targetId}`);
+
+    targetEl.innerText = `${message['totalLike']}`;
 }
 
 // Message Format for the chat
@@ -49,13 +74,28 @@ function sendMessage() {
 
 // Renders a new chat message to the page
 function addMessage(chatMessage) {
-    console.log(chatMessage)
+    // console.log(chatMessage)
     const chat = document.getElementById('chat-body');
 
     const chatNode = document.createElement('p');
     chatNode.className = chatMessage['sender'] === username ? 'user_message' : 'message';
     chatNode.innerText = chatMessage['comment'];
     chatNode.setAttribute('id-chat', chatMessage['id']);
+    chatNode.setAttribute('like', '0');
+
+    const likeWrap = document.createElement('span');
+    likeWrap.className = 'like-wrap'
+
+    const button = document.createElement('button');
+    button.innerText = 'like'
+    button.addEventListener('click', sendLike)
+    const likeTotal = document.createElement('p');
+    likeTotal.setAttribute('id', `count-${chatMessage['id']}`);
+    likeTotal.innerText = `${chatMessage['totalLike'] ? chatMessage['totalLike'] : '0'}`
+    likeWrap.appendChild(button)
+    likeWrap.appendChild(likeTotal)
+
+    chatNode.appendChild(likeWrap)
 
     chat.appendChild(chatNode)
     //
@@ -69,11 +109,11 @@ function get_chat_history() {
         if (this.readyState === 4 && this.status === 200) {
             const messages = JSON.parse(this.response);
 
-            console.log(messages)
+            // console.log(messages)
 
-            // for (const message of messages) {
-            //     addMessage(message);
-            // }
+            for (const message of messages) {
+                addMessage(message);
+            }
         }
     };
     request.open("GET", "/chat-history");
@@ -95,6 +135,7 @@ socket.onmessage = function (ws_message) {
 
         case 'like_update':
             //  Doing function that find message with corresponding id then update
+            updateLike(message)
 
             break;
 
