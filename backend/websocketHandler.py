@@ -122,7 +122,7 @@ def handleWebSocket(TCP: MyTCPHandler, username):
                 payload_data += (data[i] ^ masking_key[x]).to_bytes(1, "big")
             buffer_data_length -= 4
 
-        payload_data = payload_data
+#         payload_data = payload_data
         payload_data = TCP.escape_html(payload_data)
           
         payload_data = payload_data.decode("utf-8")
