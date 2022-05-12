@@ -1,6 +1,7 @@
 // Handshake for the webSocket
 const socket = new WebSocket('ws://' + window.location.host + '/websocket');
 let username;
+let targetUser = null;
 let wc_connection;
 
 console.log('testing js')
@@ -67,6 +68,140 @@ function updateLike(message) {
 
     targetEl.innerText = `${message['totalLike']}`;
 }
+
+function directMsg(el) {
+    const temp_targetUser = el.getAttribute('data-target');
+
+    if(temp_targetUser === username) {
+        alert('you can\'t send DM to yourself! idiot.')
+        return;
+    }
+
+    targetUser = temp_targetUser;
+
+    const body = document.body;
+    const new_section = document.createElement('section');
+    new_section.id = 'dm-section'
+    new_section.className = 'dm-section'
+    // new_section.style.height = '100%';
+    // new_section.style.width = '100%';
+    // new_section.style.top = '0';
+    // new_section.style.left = '0';
+    // new_section.style.position = 'fixed';
+    // new_section.style.backgroundColor = 'rgba(255, 255, 255, 0.5)';
+
+    // dm wrap div
+    const dm_wrap = document.createElement('div');
+    dm_wrap.className = 'dm-wrap'
+
+    // dm wrap text box
+    const dm_input = document.createElement('input');
+    dm_input.type = 'text';
+    dm_input.id = 'dm-input'
+
+    // dm send button
+    const dm_send = document.createElement('button');
+    dm_send.innerText = 'send'
+    dm_send.addEventListener('click', sendDirectMsg)
+
+    // dm close button
+    const dm_close = document.createElement('button');
+    dm_close.innerText = 'close'
+    dm_close.addEventListener('click', closeDirectPrompt);
+
+    dm_wrap.appendChild(dm_input)
+    dm_wrap.appendChild(dm_send)
+    // dm_wrap.appendChild(dm_close)
+
+    new_section.appendChild(dm_wrap);
+
+    body.appendChild(new_section);
+
+
+    // const payload = {'sender': username, 'receiver': targetUser, 'messageType': 'dm', 'commend': commend }
+}
+
+function sendDirectMsg(el) {
+    const input = document.getElementById('dm-input');
+
+    const payload = {'sender': username, 'receiver': targetUser, 'messageType': 'dm', 'comment': input.value, 'totalLike': 0, 'id': `DM-${new Date().toUTCString()}` }
+
+    // console.log(payload)
+
+    socket.send(JSON.stringify(payload));
+
+    input.value = ''
+
+    // need to add message log here
+//    or nah just close
+//
+    closeDirectPrompt();
+
+}
+
+function closeDirectPrompt(el) {
+
+    targetUser = null;
+
+    document.getElementById('dm-section').remove();
+
+}
+
+function replyDirectMsg(message) {
+    const input = document.getElementById('dm-input');
+
+    const payload = {'sender': message['receiver'], 'receiver': message['sender'], 'messageType': 'dm', 'comment': input.value, 'totalLike': 0, 'id': `DM-${new Date().toUTCString()}` }
+
+
+
+    socket.send(JSON.stringify(payload));
+
+    input.value = ''
+
+    closeDirectPrompt();
+}
+
+function gotDirectMsg(message) {
+    const body = document.body;
+    const new_section = document.createElement('section');
+    new_section.id = 'dm-section'
+    new_section.className = 'dm-section'
+
+    // dm wrap div
+    const dm_wrap = document.createElement('div');
+    dm_wrap.className = 'dm-wrap'
+
+    // dm text
+    const dm_text = document.createElement('p');
+    dm_text.style.color = 'white';
+    dm_text.innerText = message['comment']
+
+    // dm wrap text box
+    const dm_input = document.createElement('input');
+    dm_input.type = 'text';
+    dm_input.id = 'dm-input'
+
+    // dm send button
+    const dm_send = document.createElement('button');
+    dm_send.innerText = 'reply'
+    dm_send.addEventListener('click', () => replyDirectMsg(message))
+
+    // dm close button
+    const dm_close = document.createElement('button');
+    dm_close.innerText = 'close'
+    dm_close.addEventListener('click', closeDirectPrompt);
+
+
+    dm_wrap.appendChild(dm_text)
+    dm_wrap.appendChild(dm_input)
+    dm_wrap.appendChild(dm_send)
+    dm_wrap.appendChild(dm_close)
+
+    new_section.appendChild(dm_wrap);
+
+    body.appendChild(new_section);
+}
+
 
 // Message Format for the chat
 // <p className="message"> Hello </p>
@@ -141,6 +276,7 @@ socket.onmessage = function (ws_message) {
 
         case 'dm':
             //  Manage the DM
+            gotDirectMsg(message)
 
             break;
 

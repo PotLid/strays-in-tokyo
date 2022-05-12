@@ -20,14 +20,14 @@ import base64
 #     hash_to_base64 = base64.b64encode(hashed_key)
 
 #     # Create a response to upgrade the TCP socket to a WebSocket connection
-#     handshake_response = b'HTTP/1.1 101 Switching Protocols\r\nConnection: Upgrade\r\nUpgrade: websocket\r\nSec-WebSocket-Accept: ' + hash_to_base64 + b'\r\n\r\n' 
+#     handshake_response = b'HTTP/1.1 101 Switching Protocols\r\nConnection: Upgrade\r\nUpgrade: websocket\r\nSec-WebSocket-Accept: ' + hash_to_base64 + b'\r\n\r\n'
 
 #     TCP.request.sendall(handshake_response)
 
 #     # This while statement will listen to the messages sent over by the user.
 #     while True:
 #         recieved_data = TCP.request.recv(1024)
-     
+
 
 '''
     Web sockets are received and sent in the following framework.
@@ -51,7 +51,7 @@ import base64
      |                     Payload Data continued ...                |
      +---------------------------------------------------------------+
 
-    This websocket handler parses the payload (message) sent by a client 
+    This websocket handler parses the payload (message) sent by a client
     and sends to the payload (message) to other active clients.
 '''
 
@@ -88,7 +88,7 @@ def handleWebSocket(TCP: MyTCPHandler, username):
                 i += 1
                 new_payload = (new_payload << 8) | received_data[i]
             payload_length = new_payload
-    
+
         data += received_data
 
         if payload_length > 1024:
@@ -106,7 +106,7 @@ def handleWebSocket(TCP: MyTCPHandler, username):
             for x in range(0,4):
                 i += 1
                 masking_key.append(data[i])
-        
+
         buffer_data_length = payload_length
         payload_data = b''
 
@@ -115,7 +115,7 @@ def handleWebSocket(TCP: MyTCPHandler, username):
                 i += 1
                 payload_data += (data[i] ^ masking_key[x]).to_bytes(1, "big")
             buffer_data_length -= 4
-        
+
         if buffer_data_length != 0:
             for x in range(0, buffer_data_length):
                 i += 1
@@ -124,14 +124,14 @@ def handleWebSocket(TCP: MyTCPHandler, username):
 
 #         payload_data = payload_data
         payload_data = TCP.escape_html(payload_data)
-          
+
         payload_data = payload_data.decode("utf-8")
 
         payload_as_json = json.loads(payload_data)
-     
-       
-        
-        if payload_as_json['messageType'] == 'user_to_server': 
+
+
+
+        if payload_as_json['messageType'] == 'user_to_server':
             timeID = payload_as_json['id']
             json_message = {'messageType': 'server_to_user', 'sender': username, 'id': timeID, 'comment': payload_as_json['comment'] }
 
@@ -141,21 +141,21 @@ def handleWebSocket(TCP: MyTCPHandler, username):
 
             message_as_bytes = json.dumps(json_message).encode()
             webframe = convert_webframe(TCP, message_as_bytes)
-        
+
             for client in TCP.websocket_connections:
                 client['socket'].request.sendall(webframe)
- 
-        elif payload_as_json['messageType'] == 'like':  
+
+        elif payload_as_json['messageType'] == 'like':
             timeID = payload_as_json['id']
             # updates postInfo DB element ({'id': unique_time_stamp, 'sender': username, 'comment': comment,  'likes': 0 (int)}) with incremented like count
             # (returns element with updated likes without '_id' attribute if needed)
-            updatedElem = TCP.chatCollection.find_one_and_update({'id' : timeID}, {'$inc' : {'totalLike': 1}}, {'_id' : False}, new = True)            
+            updatedElem = TCP.chatCollection.find_one_and_update({'id' : timeID}, {'$inc' : {'totalLike': 1}}, {'_id' : False}, new = True)
             # parse return Frame
             json_message = {'messageType': 'like_update', 'id': timeID, 'totalLike': updatedElem['totalLike']}
 
             message_as_bytes = json.dumps(json_message).encode()
             webframe = convert_webframe(TCP, message_as_bytes)
-        
+
             for client in TCP.websocket_connections:
                 client['socket'].request.sendall(webframe)
         elif payload_as_json['messageType'] == 'dislike':
@@ -168,7 +168,7 @@ def handleWebSocket(TCP: MyTCPHandler, username):
 
             message_as_bytes = json.dumps(json_message).encode()
             webframe = convert_webframe(TCP, message_as_bytes)
-        
+
             for client in TCP.websocket_connections:
                 client['socket'].request.sendall(webframe)
         elif payload_as_json['messageType'] == 'dm':
@@ -185,12 +185,13 @@ def handleWebSocket(TCP: MyTCPHandler, username):
             webframe = convert_webframe(TCP, message_as_bytes)
             # message will display only for the sender and the receiver of the message
             for client in TCP.websocket_connections:
-                if client['username'] == sender or client['username'] == receiver:
+#                 if client['username'] == sender or client['username'] == receiver:
+                if client['username'] == receiver:
                     client['socket'].request.sendall(webframe)
 
         data = b''
 
-    return 
+    return
 
 
 def websocket_request(TCP: MyTCPHandler, Headers):
@@ -224,10 +225,10 @@ def generate_socket_response(response_code: str, accept_response: bytes):
     return response
 
 def convert_webframe(TCP: MyTCPHandler, message: bytes):
-    
+
     length = len(message)
     frame = 0
-    
+
     if length < 126:
         frame = (129).to_bytes(1, "big") + (length).to_bytes(1, "big")
     elif length >= 126 and length < 65536:

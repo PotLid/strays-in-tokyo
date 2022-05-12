@@ -37,7 +37,7 @@
                     <div class = "online_users">
                         <ul>
                             {{loop}}
-                                <button class = "buttonuser" onclick = "pop('{{username}}')">
+                                <button class = "buttonuser" data-target="{{username}}" onclick="directMsg(this)" >
                                 <img src = "/frontend/static/{{profile_picture_name}}" id = "kitty">{{username}}</button>
                             {{end_loop}}
                         </ul>
