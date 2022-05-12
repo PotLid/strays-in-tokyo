@@ -101,20 +101,23 @@ def handleRegistration(TCP, email, password, confirm_password):
     print("##########################")
     print("We are now handling the registration")
     print("##########################", '\n')
-
-    # If the user has typed any email and password, we redirect them to the login page.   
-    if len(email) != 0 and len(password) != 0 and (password == confirm_password):
-        print("Registration successful")
-        # Generating a random salt
-        random_salt = bcrypt.gensalt()
-        # Append the random salt to the given passcode
-        password = password + random_salt
-        # Hash the passcode
-        hashed = bcrypt.hashpw(password, random_salt)
-        server.MyTCPHandler.userCollection.insert_one({'email': email, 'salt':random_salt, 'hash': hashed, 'profile_picture':b'kitty.png', 'authenticated_token':b'', "authenticated_xsrf_token":b''})
-        # Redirect to the homepage after registering
-        RedirectResponse = 'HTTP/1.1 301 Moved Permanently\r\nContent-Type: text/plain\r\nContent-Length: 0\r\nLocation: /login\r\n\r\n'
-        return TCP.request.sendall(RedirectResponse.encode())
+    # Making sure that a new/unique account is being created, no duplicated allowed
+    potential_existing_user = server.MyTCPHandler.userCollection.find_one({'email':email})
+    
+    if potential_existing_user == None:
+        # If the user has typed any email and password, we redirect them to the login page.   
+        if len(email) != 0 and len(password) != 0 and (password == confirm_password):
+            print("Registration successful")
+            # Generating a random salt
+            random_salt = bcrypt.gensalt()
+            # Append the random salt to the given passcode
+            password = password + random_salt
+            # Hash the passcode
+            hashed = bcrypt.hashpw(password, random_salt)
+            server.MyTCPHandler.userCollection.insert_one({'email': email, 'salt':random_salt, 'hash': hashed, 'profile_picture':b'kitty.png', 'authenticated_token':b'', "authenticated_xsrf_token":b''})
+            # Redirect to the homepage after registering
+            RedirectResponse = 'HTTP/1.1 301 Moved Permanently\r\nContent-Type: text/plain\r\nContent-Length: 0\r\nLocation: /login\r\n\r\n'
+            return TCP.request.sendall(RedirectResponse.encode())
 
     # If the user hasn't typed any email or password, we just redirect them back to the same page.   
     else:
@@ -189,7 +192,7 @@ def handleProfilePicture(TCP, data, profile_picture_filename, profile_picture_da
     cookie_id = retrieveAuthenticationCookieId(data[b'Cookie'])
     email = authenticatedUser(cookie_id)
     if len(profile_picture_filename) == 0:
-        profile_picture_filename = b'kitty.png'
+        profile_picture_filename = retrieveProfilePicture(email)
     path = 'frontend/static/' + profile_picture_filename.decode()
     check_existense = os.path.exists(path)
     if check_existense == False:
