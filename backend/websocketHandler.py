@@ -224,12 +224,12 @@ def generate_socket_response(response_code: str, accept_response: bytes):
     return response
 
 def convert_webframe(TCP: MyTCPHandler, message: bytes):
-
+    
     length = len(message)
     frame = 0
-
+    
     if length < 126:
-        frame = (129).to_bytes(1, "big") + (length).to_bytes
+        frame = (129).to_bytes(1, "big") + (length).to_bytes(1, "big")
     elif length >= 126 and length < 65536:
         frame = (129).to_bytes(1, "big") + (126).to_bytes(1, "big") + (length).to_bytes(2, "big")
     else:
