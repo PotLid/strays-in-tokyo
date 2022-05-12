@@ -94,6 +94,11 @@ function directMsg(el) {
     const dm_wrap = document.createElement('div');
     dm_wrap.className = 'dm-wrap'
 
+    // dm heading
+    const dm_head = document.createElement('h2');
+    dm_head.style.color = 'white';
+    dm_head.innerText = 'To. ' + targetUser;
+
     // dm wrap text box
     const dm_input = document.createElement('input');
     dm_input.type = 'text';
@@ -109,9 +114,10 @@ function directMsg(el) {
     dm_close.innerText = 'close'
     dm_close.addEventListener('click', closeDirectPrompt);
 
+    dm_wrap.appendChild(dm_head)
     dm_wrap.appendChild(dm_input)
     dm_wrap.appendChild(dm_send)
-    // dm_wrap.appendChild(dm_close)
+    dm_wrap.appendChild(dm_close)
 
     new_section.appendChild(dm_wrap);
 
@@ -171,6 +177,11 @@ function gotDirectMsg(message) {
     const dm_wrap = document.createElement('div');
     dm_wrap.className = 'dm-wrap'
 
+    // dm heading
+    const dm_head = document.createElement('h2');
+    dm_head.style.color = 'white';
+    dm_head.innerText = 'From. ' + message['sender'];
+
     // dm text
     const dm_text = document.createElement('p');
     dm_text.style.color = 'white';
@@ -183,7 +194,7 @@ function gotDirectMsg(message) {
 
     // dm send button
     const dm_send = document.createElement('button');
-    dm_send.innerText = 'reply'
+    dm_send.innerText = 'reply to ' + message['sender']
     dm_send.addEventListener('click', () => replyDirectMsg(message))
 
     // dm close button
@@ -191,7 +202,7 @@ function gotDirectMsg(message) {
     dm_close.innerText = 'close'
     dm_close.addEventListener('click', closeDirectPrompt);
 
-
+    dm_wrap.appendChild(dm_head)
     dm_wrap.appendChild(dm_text)
     dm_wrap.appendChild(dm_input)
     dm_wrap.appendChild(dm_send)
