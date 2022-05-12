@@ -1,29 +1,43 @@
 // Handshake for the webSocket
 const socket = new WebSocket('ws://' + window.location.host + '/websocket');
-
+let username;
 let wc_connection;
 
 console.log('testing js')
 
+function encodeCookie() {
+    return document.cookie.split(';').reduce((obj, cookieLine) => {
+        const [key, value] = cookieLine.split('=');
+        return {
+            ...obj,
+            [key?.trim()]: value?.trim()
+        }
+    }, {})
+}
+
 // CLick on user_name => getting id (event listener to create element, and send message)
 
-
-
-
-function onEnter(e) {
-    if(e.code === 'Enter') {
+// Allow users to send messages by pressing enter instead of clicking the Send button
+document.addEventListener("keypress", function (event) {
+    if (event.code === "Enter") {
         sendMessage();
     }
-}
+});
 
 // Read the comment the user is sending to chat and send it to the server over the WebSocket as a JSON string
 function sendMessage() {
-    const chatBox = document.getElementById("chat-comment");
+    const chatBox = document.getElementById("input-chat");
     const comment = chatBox.value;
+    // const username = username;
+    const id = username + '-' + new Date().toUTCString()
+
     chatBox.value = "";
     chatBox.focus();
 
-    const payload = {'sender': 'username', 'messageType': 'user_to_server', 'id': unique_time_stamp  ,'comment': comment}
+    const payload = {'sender': username, 'messageType': 'user_to_server', 'id': id  ,'comment': comment}
+
+    console.log(payload)
+
     if (comment !== "") {
         socket.send(JSON.stringify(payload));
     }
@@ -35,9 +49,17 @@ function sendMessage() {
 
 // Renders a new chat message to the page
 function addMessage(chatMessage) {
-    let chat = document.getElementById('chat-body');
+    console.log(chatMessage)
+    const chat = document.getElementById('chat-body');
 
-    chat.innerHTML += "<b>" + chatMessage['username'] + "</b>: " + chatMessage["comment"] + "<br/>";
+    const chatNode = document.createElement('p');
+    chatNode.className = chatMessage['sender'] === username ? 'user_message' : 'message';
+    chatNode.innerText = chatMessage['comment'];
+    chatNode.setAttribute('id-chat', chatMessage['id']);
+
+    chat.appendChild(chatNode)
+    //
+    // chat.innerHTML += "<b>" + chatMessage['username'] + "</b>: " + chatMessage["comment"] + "<br/>";
 }
 
 // // called when the page loads to get the chat_history
@@ -88,8 +110,13 @@ socket.onmessage = function (ws_message) {
 }
 
 function chat_init() {
+    username = encodeCookie()['username'];
 
     get_chat_history()
+
+    // const result = encodeCookie();
+    //
+    // console.log(result)
 
     // use this line to start your video without having to click a button. Helpful for debugging
     // startVideo();
