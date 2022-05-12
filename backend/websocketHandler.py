@@ -69,14 +69,14 @@ def handleWebSocket(TCP: MyTCPHandler, username):
         if opcode == 8:
             # delete socket connection
             json_message = {'messageType':'user_disconnect','username':username}
-            
+
             message_as_bytes = json.dumps(json_message).encode()
             webframe = convert_webframe(TCP, message_as_bytes)
 
             for client in TCP.websocket_connections:
                 if client['socket'] != TCP:
                     client['socket'].request.sendall(webframe)
-            
+
             TCP.websocket_connections.remove({'username':username, 'socket':TCP})
             break
 
@@ -214,14 +214,15 @@ def websocket_request(TCP: MyTCPHandler, Headers):
     cookieID = retrieveAuthenticationCookieId(Headers[b'Cookie'])
     username = authenticatedUser(cookieID).decode()
     TCP.websocket_connections.append({'username': username, 'socket': TCP})
-    
+
     json_message = {'messageType':'user_connect','username':username}
-            
+
     message_as_bytes = json.dumps(json_message).encode()
     webframe = convert_webframe(TCP, message_as_bytes)
-    
+
     for client in TCP.websocket_connections:
-        client['socket'].request.sendall(webframe)
+        if client['socket'] != TCP:
+            client['socket'].request.sendall(webframe)
 
     handleWebSocket(TCP, username)
 
