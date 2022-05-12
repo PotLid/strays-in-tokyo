@@ -1,5 +1,10 @@
 // Handshake for the webSocket
 const socket = new WebSocket('ws://' + window.location.host + '/websocket');
+
+socket.addEventListener('open', e => {
+    socket.send(JSON.stringify({'messageType': 'user_handshake', username: encodeCookie()['username']}))
+})
+
 let username;
 let targetUser = null;
 let wc_connection;
@@ -266,6 +271,34 @@ function get_chat_history() {
     request.send();
 }
 
+function addUser(message) {
+    if(message['username'] === username) {
+        return;
+    }
+
+    const userList = document.getElementById('ul-users');
+
+    const button = document.createElement('button');
+    button.id = `u-${message['username']}`;
+    button.className = 'buttonuser';
+    button.setAttribute('data-target', message['username']);
+    button.addEventListener('click', e => directMsg(e.target));
+
+    const img = document.createElement('img');
+    img.src = ''
+    img.id = 'kitty'
+
+    button.appendChild(img)
+    button.innerText = message['username'];
+
+    userList.appendChild(button);
+
+}
+
+function removeUser(message) {
+    document.getElementById(`u-${message['username']}`).remove();
+}
+
 
 // Called whenever data is received from the server over the WebSocket connection
 socket.onmessage = function (ws_message) {
@@ -288,6 +321,16 @@ socket.onmessage = function (ws_message) {
         case 'dm':
             //  Manage the DM
             gotDirectMsg(message)
+
+            break;
+
+        case 'user_connect':
+            addUser(message)
+
+            break;
+
+        case 'user_disconnect':
+            removeUser(message)
 
             break;
 

@@ -35,9 +35,9 @@
                     </div>
 
                     <div class = "online_users">
-                        <ul>
+                        <ul id="ul-users">
                             {{loop}}
-                                <button class = "buttonuser" data-target="{{username}}" onclick="directMsg(this)" >
+                                <button id="u-{{username}}" class = "buttonuser" data-target="{{username}}" onclick="directMsg(this)" >
                                 <img src = "/frontend/static/{{profile_picture_name}}" id = "kitty">{{username}}</button>
                             {{end_loop}}
                         </ul>
