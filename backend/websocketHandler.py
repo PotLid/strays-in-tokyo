@@ -68,6 +68,8 @@ def handleWebSocket(TCP: MyTCPHandler, username):
         opcode = first_int & 15
         if opcode == 8:
             # delete socket connection
+            cookieID = retrieveAuthenticationCookieId(username[b'Cookie'])
+            username = authenticatedUser(cookieID).decode()
             json_message = {'messageType':'user_disconnect','username':username}
 
             message_as_bytes = json.dumps(json_message).encode()
