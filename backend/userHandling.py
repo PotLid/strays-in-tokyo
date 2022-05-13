@@ -297,22 +297,23 @@ def onlineUsers():
     for user in all_users:
         logged_in_users = {}
         email = ''
-        if user['username'] != '':
-            if user['username'].count('@') == 1:
-                find_endpoint =  user['username'].find('@')
-                email = user['username'][0:find_endpoint]
-                email = email.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
-                logged_in_users['username'] = email
-                logged_in_users['profile_picture'] = user['profile_picture']
-            if user['username'].count('@') > 1:
-                last_needed_character =  user['email'].rfind('@')
-                email = user['username'][0:last_needed_character]
-                email = email.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
-                logged_in_users['username'] = email
-                logged_in_users['profile_picture'] = user['profile_picture']
-            if user['username'].count('@') == 0:
-                email = user['username'].replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
-                logged_in_users['username'] = email
-                logged_in_users['profile_picture'] = user['profile_picture']
-            final_list.append(logged_in_users)
+        if user['username'] not in logged_in_users.keys():
+            if user['username'] != '':
+                if user['username'].count('@') == 1:
+                    find_endpoint =  user['username'].find('@')
+                    email = user['username'][0:find_endpoint]
+                    email = email.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+                    logged_in_users['username'] = email
+                    logged_in_users['profile_picture'] = user['profile_picture']
+                if user['username'].count('@') > 1:
+                    last_needed_character =  user['email'].rfind('@')
+                    email = user['username'][0:last_needed_character]
+                    email = email.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+                    logged_in_users['username'] = email
+                    logged_in_users['profile_picture'] = user['profile_picture']
+                if user['username'].count('@') == 0:
+                    email = user['username'].replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+                    logged_in_users['username'] = email
+                    logged_in_users['profile_picture'] = user['profile_picture']
+                final_list.append(logged_in_users)
     return final_list
