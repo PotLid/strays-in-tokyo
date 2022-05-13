@@ -305,18 +305,27 @@ function addUser(message) {
     button.setAttribute('data-target', message['username']);
     button.addEventListener('click', e => directMsg(e.target));
 
-    const img = document.createElement('img');
-    img.src = `/frontend/static/${message['profile_picture']}`
-    img.id = 'kitty'
+    const pfp = document.createElement('img');
+    pfp.src = `/frontend/static/${message['profile_picture']}`
+    pfp.id = 'kitty'
 
-    button.appendChild(img)
-    button.innerText = message['username'];
+    // console.log(pfp)
+
+    const usernameNode = document.createTextNode(message['username']);
+
+    button.appendChild(pfp)
+    button.appendChild(usernameNode)
+
+    // button.innerText = message['username'];
+    // button.appendChild(pfp)
 
     userList.appendChild(button);
-
 }
 
 function removeUser(message) {
+    if(!message['username']) {
+        return;
+    }
     document.getElementById(`u-${message['username']}`).remove();
 }
 

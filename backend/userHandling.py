@@ -14,7 +14,7 @@ This file will handle all of the User Authentication and Handling.
 Login:
     When a User logs in for the first time, we will set a authentication cookie for them.
 
-Register: 
+Register:
     When a user sends a registration request, store their username and a salted hash of their password in your database.
 
 Profile Picture:
@@ -29,12 +29,12 @@ def parse(TCP, path, body):
     #region...(Parsing the MultiFormData)
     Split = actual_body.find(b'\r\n')
 
-    # Isolate the Multi-Form data boundaries 
+    # Isolate the Multi-Form data boundaries
     Border = actual_body[:Split]
-    
+
     # Split all instances of a border to isolate the message and image
     SplitBorders = actual_body.split(Border)
-    
+
     email = b''
     password = b''
     confirm_password = b''
@@ -58,7 +58,7 @@ def parse(TCP, path, body):
         if b'form-data; name="confirm_password"\r\n\r\n' in data:
             find_password = data.find(b'\r\n\r\n')
             confirm_password = data[find_password+4:len(data)-2]
-        
+
 
         # For identifying the Comment/Caption.
         if b'form-data; name="comment"\r\n\r\n' in data:
@@ -73,7 +73,7 @@ def parse(TCP, path, body):
             profile_picture_filename = profile_picture_filename.replace("/", "").replace("%20", " ")
 
             profile_picture_data = data[data.find(b'\r\n\r\n')+4:]
-            
+
         # For identifying the xsrf tokens
         if b'form-data; name="xsrf_token"' in data:
             find_xsrf_token = data.find(b'\r\n\r\n')
@@ -103,9 +103,9 @@ def handleRegistration(TCP, email, password, confirm_password):
     print("##########################", '\n')
     # Making sure that a new/unique account is being created, no duplicated allowed
     potential_existing_user = server.MyTCPHandler.userCollection.find_one({'email':email})
-    
+
     if potential_existing_user == None:
-        # If the user has typed any email and password, we redirect them to the login page.   
+        # If the user has typed any email and password, we redirect them to the login page.
         if len(email) != 0 and len(password) != 0 and (password == confirm_password):
             print("Registration successful")
             # Generating a random salt
@@ -119,15 +119,15 @@ def handleRegistration(TCP, email, password, confirm_password):
             RedirectResponse = 'HTTP/1.1 301 Moved Permanently\r\nContent-Type: text/plain\r\nContent-Length: 0\r\nLocation: /login\r\n\r\n'
             return TCP.request.sendall(RedirectResponse.encode())
 
-    # If the user hasn't typed any email or password, we just redirect them back to the same page.   
+    # If the user hasn't typed any email or password, we just redirect them back to the same page.
     else:
         RedirectResponse = 'HTTP/1.1 301 Moved Permanently\r\nContent-Type: text/plain\r\nContent-Length: 0\r\nLocation: /register\r\n\r\n'
         return TCP.request.sendall(RedirectResponse.encode())
 
 
 '''
-When a user successfully logs in, set an authentication token as a cookie for that user with the HttpOnly directive set. 
-These tokens should be random values that are associated with the user. 
+When a user successfully logs in, set an authentication token as a cookie for that user with the HttpOnly directive set.
+These tokens should be random values that are associated with the user.
 You must store a hash of each token in your database so you can verify them on subsequent requests.
 The data will be stored in byte format.'''
 
@@ -176,7 +176,7 @@ def handleLogin(TCP, email, password):
         RedirectResponse = 'HTTP/1.1 301 Moved Permanently\r\nContent-Type: text/plain\r\nContent-Length: 0\r\nLocation: /login\r\n\r\n'
         return TCP.request.sendall(RedirectResponse.encode())
 
-    
+
 
 
 '''
@@ -201,7 +201,7 @@ def handleProfilePicture(TCP, data, profile_picture_filename, profile_picture_da
     user_info = server.MyTCPHandler.userCollection.find_one({"email": email})
     if user_info != None:
         server.MyTCPHandler.userCollection.update_one({"email": email}, {"$set":{"profile_picture": profile_picture_filename}})
-    
+
     return
 
 
@@ -234,7 +234,7 @@ def handleVisit(TCP, cookie_id, email):
     xsrf_token = ""
 
     if cookie_id != b'':
-                    
+
         valid_xsrf_token = server.MyTCPHandler.userCollection.find_one({"email": email})
         print("Valid xsrf token: ", valid_xsrf_token, '\n')
         if valid_xsrf_token != None:
@@ -297,7 +297,7 @@ def onlineUsers():
     for user in all_users:
         logged_in_users = {}
         email = ''
-        
+
         if user['username'] != '':
             if user['username'].count('@') == 1:
                 find_endpoint =  user['username'].find('@')
@@ -316,7 +316,7 @@ def onlineUsers():
                 logged_in_users['username'] = email
                 logged_in_users['profile_picture'] = user['profile_picture']
             final_list.append(logged_in_users)
-            
+
     list_to_return = []
     for dictionary in final_list:
         if dictionary not in list_to_return:

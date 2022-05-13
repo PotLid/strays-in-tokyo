@@ -81,7 +81,7 @@ def handleWebSocket(TCP: MyTCPHandler, username, profile_picture):
                         client['socket'].request.sendall(webframe)
                     except:
                         profile_picture = retrieveProfilePicture(username).decode()
-            
+
             TCP.websocket_connections.remove({'username':username, 'socket':TCP, 'profile_picture': profile_picture})
             MyTCPHandler.loggedUsersCollection.delete_one({'username'})
 
@@ -209,7 +209,7 @@ def handleWebSocket(TCP: MyTCPHandler, username, profile_picture):
 #                 if client['username'] == sender or client['username'] == receiver:
                 if client['username'] == receiver:
                     client['socket'].request.sendall(webframe)
-                    
+
         data = b''
 
     return
@@ -226,7 +226,9 @@ def websocket_request(TCP: MyTCPHandler, Headers):
     cookieID = retrieveAuthenticationCookieId(Headers[b'Cookie'])
     username = authenticatedUser(cookieID).decode()
     profile_picture = retrieveProfilePicture(username.encode()).decode()
+
     TCP.websocket_connections.append({'username': username, 'socket': TCP, 'profile_picture': profile_picture})
+
     MyTCPHandler.loggedUsersCollection.insert_one({'username': username, 'profile_picture': profile_picture})
     print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$", '\n')
     print(TCP.websocket_connections, '\n')
