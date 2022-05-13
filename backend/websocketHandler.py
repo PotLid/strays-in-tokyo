@@ -82,7 +82,7 @@ def handleWebSocket(TCP: MyTCPHandler, username):
                     except:
                         profile_picture = retrieveProfilePicture(username).decode()
                         TCP.websocket_connections.remove({'username':username, 'socket':TCP, 'profile_picture': profile_picture})
-                        
+
             break
 
         i += 1
@@ -178,7 +178,7 @@ def handleWebSocket(TCP: MyTCPHandler, username):
                     client['socket'].request.sendall(webframe)
                 except:
                     TCP.websocket_connections.remove({'username':username, 'socket':TCP, 'profile_picture': profile_picture})
-                
+
         elif payload_as_json['messageType'] == 'dislike':
             timeID = payload_as_json['id']
             # updates postInfo DB element with decremented like count
@@ -194,8 +194,8 @@ def handleWebSocket(TCP: MyTCPHandler, username):
                 try:
                     client['socket'].request.sendall(webframe)
                 except:
-                    TCP.websocket_connections.remove({'username':username, 'socket':TCP, 'profile_picture': profile_picture})client['socket'].request.sendall(webframe)
-                
+                    TCP.websocket_connections.remove({'username':username, 'socket':TCP, 'profile_picture': profile_picture})
+
         elif payload_as_json['messageType'] == 'dm':
             timeID = payload_as_json['id']
             sender = payload_as_json['sender']
