@@ -36,10 +36,10 @@
 
                     <div class = "online_users">
                         <ul id="ul-users">
-                            
+
                             <!-- <button id="u-{{username}}" class = "buttonuser" data-target="{{username}}" onclick="directMsg(this)" > -->
-                                
-                            
+
+
                         </ul>
                     </div>
                 </div>
@@ -54,11 +54,11 @@
                     </div>
 
                     <div class = "footer">
-<!--                        <form action="/chatpage" id="chat-form" method="post" enctype="multipart/form-data">-->
-<!--                            <input value="{{xsrf_token}}" name="xsrf_token" hidden>-->
+                        <form action="/chatpage" id="chat-form" method="post" enctype="multipart/form-data">
+                            <input id="id-xsrf" value="{{xsrf_token}}" name="xsrf_token" hidden>
 <!--                            <input id="chat-comment" autocomplete = "off" type = "text" name = "comment">-->
 <!--                            <button onclick="onEnter()"> SEND </button>-->
-<!--                        </form>-->
+                        </form>
                         <input id="input-chat" type="text" name="comment" autocomplete = "off" style="height: 40px; width: 100%;">
                     </div>
 

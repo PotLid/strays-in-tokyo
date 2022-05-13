@@ -9,7 +9,7 @@ let username;
 let targetUser = null;
 let wc_connection;
 
-console.log('testing js')
+// console.log('testing js')
 
 function encodeCookie() {
     return document.cookie.split(';').reduce((obj, cookieLine) => {
@@ -32,6 +32,7 @@ document.addEventListener("keypress", function (event) {
 
 // Read the comment the user is sending to chat and send it to the server over the WebSocket as a JSON string
 function sendMessage() {
+    const xsrf = document.getElementById('id-xsrf');
     const chatBox = document.getElementById("input-chat");
     const comment = chatBox.value;
     // const username = username;
@@ -40,7 +41,7 @@ function sendMessage() {
     chatBox.value = "";
     chatBox.focus();
 
-    const payload = {'sender': username, 'messageType': 'user_to_server', 'id': id  ,'comment': comment}
+    const payload = {'sender': username, 'messageType': 'user_to_server', 'id': id  ,'comment': comment, 'xsrf': xsrf.value}
 
     if (comment !== "") {
         socket.send(JSON.stringify(payload));
@@ -53,10 +54,11 @@ function sendLike(e) {
     // console.log(e.target.nextSibling)
 
     // console.log(e.target.parentNode.parentElement)
+    const xsrf = document.getElementById('id-xsrf');
 
     const targetId = e.target.parentNode.parentNode.getAttribute('id-chat');
 
-    const payload = {'messageType': 'like', 'id': targetId};
+    const payload = {'messageType': 'like', 'id': targetId, 'xsrf': xsrf.value};
 
     // console.log(payload)
 
@@ -134,8 +136,9 @@ function directMsg(el) {
 
 function sendDirectMsg(el) {
     const input = document.getElementById('dm-input');
+    const xsrf = document.getElementById('id-xsrf');
 
-    const payload = {'sender': username, 'receiver': targetUser, 'messageType': 'dm', 'comment': input.value, 'totalLike': 0, 'id': `DM-${new Date().toUTCString()}` }
+    const payload = {'sender': username, 'receiver': targetUser, 'messageType': 'dm', 'comment': input.value, 'totalLike': 0, 'id': `DM-${new Date().toUTCString()}`, 'xsrf': xsrf.value }
 
     // console.log(payload)
 
@@ -160,10 +163,9 @@ function closeDirectPrompt(el) {
 
 function replyDirectMsg(message) {
     const input = document.getElementById('dm-input');
+    const xsrf = document.getElementById('id-xsrf');
 
-    const payload = {'sender': message['receiver'], 'receiver': message['sender'], 'messageType': 'dm', 'comment': input.value, 'totalLike': 0, 'id': `DM-${new Date().toUTCString()}` }
-
-
+    const payload = {'sender': message['receiver'], 'receiver': message['sender'], 'messageType': 'dm', 'comment': input.value, 'totalLike': 0, 'id': `DM-${new Date().toUTCString()}`, 'xsrf': xsrf.value }
 
     socket.send(JSON.stringify(payload));
 
@@ -271,6 +273,23 @@ function get_chat_history() {
     request.send();
 }
 
+function getUserList() {
+    const request = new XMLHttpRequest();
+    request.onreadystatechange = function () {
+        if (this.readyState === 4 && this.status === 200) {
+            const users = JSON.parse(this.response);
+
+            console.log(users)
+
+            for (const user of users) {
+                addUser(user)
+            }
+        }
+    };
+    request.open("GET", "/loggedUsers");
+    request.send();
+}
+
 function addUser(message) {
     if(message['username'] === username) {
         return;
@@ -344,6 +363,8 @@ function chat_init() {
     username = encodeCookie()['username'];
 
     get_chat_history()
+
+    getUserList();
 
     // const result = encodeCookie();
     //
