@@ -83,6 +83,7 @@ def handleWebSocket(TCP: MyTCPHandler, username, profile_picture):
                         profile_picture = retrieveProfilePicture(username).decode()
             
             TCP.websocket_connections.remove({'username':username, 'socket':TCP, 'profile_picture': profile_picture})
+            MyTCPHandler.loggedUsersCollection.delete_one({'username'})
 
             break
 
@@ -226,6 +227,7 @@ def websocket_request(TCP: MyTCPHandler, Headers):
     username = authenticatedUser(cookieID).decode()
     profile_picture = retrieveProfilePicture(username.encode()).decode()
     TCP.websocket_connections.append({'username': username, 'socket': TCP, 'profile_picture': profile_picture})
+    MyTCPHandler.loggedUsersCollection.insert_one({'username': username, 'profile_picture': profile_picture})
     print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$", '\n')
     print(TCP.websocket_connections, '\n')
 
@@ -240,6 +242,7 @@ def websocket_request(TCP: MyTCPHandler, Headers):
                 client['socket'].request.sendall(webframe)
             except:
                 TCP.websocket_connections.remove({'username':username, 'socket':TCP, 'profile_picture': profile_picture})
+                MyTCPHandler.loggedUsersCollection.delete_one({'username'})
 
     handleWebSocket(TCP, username, profile_picture)
 

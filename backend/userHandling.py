@@ -291,8 +291,9 @@ def handleLogout(cookie_data):
 def onlineUsers():
     final_list = []
     # This is a list of dictionaries
-    all_users = server.MyTCPHandler.websocket_connections
-    
+    all_users = server.MyTCPHandler.loggedUsersCollection.find({})
+    if all_users == None:
+        all_users = []
     for user in all_users:
         logged_in_users = {}
         email = ''

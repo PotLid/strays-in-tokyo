@@ -31,7 +31,8 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
     {'sender': username, 'receiver': username, 'messageType': messageType, 'id': unique_time_stamp, 'comment': comment, 'totalLike': 0}
     '''
     chatCollection = mydb['Chat']
-
+    
+    loggedUsersCollection = mydb['LoggedIn']
 
     buffer_length = 0
     Content_Length = 0
