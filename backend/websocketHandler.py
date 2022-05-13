@@ -77,7 +77,8 @@ def handleWebSocket(TCP: MyTCPHandler, username):
                 if client['socket'] != TCP:
                     client['socket'].request.sendall(webframe)
 
-            TCP.websocket_connections.remove({'username':username, 'socket':TCP})
+            profile_picture = retrieveProfilePicture(username).decode()
+            MyTCPHandler.websocket_connections.remove({'username':username, 'socket':TCP, 'profile_picture': profile_picture})
             break
 
         i += 1
@@ -213,13 +214,12 @@ def websocket_request(TCP: MyTCPHandler, Headers):
     # username = "User" + str(random.randint(0,1000))
     cookieID = retrieveAuthenticationCookieId(Headers[b'Cookie'])
     username = authenticatedUser(cookieID).decode()
-    TCP.websocket_connections.append({'username': username, 'socket': TCP})
-    profile_picture = retrieveProfilePicture(username.encode())
+    profile_picture = retrieveProfilePicture(username.encode()).decode()
+    MyTCPHandler.websocket_connections.append({'username': username, 'socket': TCP, 'profile_picture': profile_picture})
+    print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$", '\n')
+    print(MyTCPHandler.websocket_connections, '\n')
 
-    print('Stop playing stupid FF 14')
-    print(profile_picture)
-
-    json_message = {'messageType':'user_connect','username':username, 'profile_picture': profile_picture}
+    json_message = {'messageType':'user_connect','username':username}
 
     message_as_bytes = json.dumps(json_message).encode()
     webframe = convert_webframe(TCP, message_as_bytes)

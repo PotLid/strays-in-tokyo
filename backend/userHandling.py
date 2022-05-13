@@ -290,30 +290,28 @@ def handleLogout(cookie_data):
     return
 def onlineUsers():
     final_list = []
-    all_users = server.MyTCPHandler.userCollection.find({})
+    # This is a list of dictionaries
+    all_users = server.MyTCPHandler.websocket_connections
     
     for user in all_users:
         logged_in_users = {}
-        email = b''
-        if user['authenticated_token'] != b'':
-            if user['email'].count(b'@') == 1:
-                find_endpoint =  user['email'].find(b'@')
-                email = user['email'][0:find_endpoint]
-                email = email.decode()
+        email = ''
+        if user['username'] != '':
+            if user['username'].count('@') == 1:
+                find_endpoint =  user['username'].find('@')
+                email = user['username'][0:find_endpoint]
                 email = email.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
                 logged_in_users['username'] = email
-                logged_in_users['profile_picture_name'] = user['profile_picture'].decode()
-            if user['email'].count(b'@') > 1:
-                last_needed_character =  user['email'].rfind(b'@')
-                email = user['email'][0:last_needed_character]
-                email = email.decode()
+                logged_in_users['profile_picture_name'] = user['profile_picture']
+            if user['username'].count('@') > 1:
+                last_needed_character =  user['email'].rfind('@')
+                email = user['username'][0:last_needed_character]
                 email = email.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
                 logged_in_users['username'] = email
-                logged_in_users['profile_picture_name'] = user['profile_picture'].decode()
-            if user['email'].count(b'@') == 0:
-                email = user['email'].decode()
+                logged_in_users['profile_picture_name'] = user['profile_picture']
+            if user['username'].count('@') == 0:
                 email = email.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
                 logged_in_users['username'] = email
-                logged_in_users['profile_picture_name'] = user['profile_picture'].decode()
+                logged_in_users['profile_picture_name'] = user['profile_picture']
             final_list.append(logged_in_users)
     return final_list

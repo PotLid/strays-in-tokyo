@@ -141,8 +141,7 @@ def handle(TCP: server.MyTCPHandler, path, data):
                     
                 online_users = onlineUsers()
                 print("These are all of the online users so far: ", online_users)
-                content = render_template("frontend/templates/chat.html", {"xsrf_token":xsrf_token,
-                                                                            "loop_data": online_users})
+                content = render_content("frontend/templates/chat.html")
                 content = generate_http_response(content.encode(), "text/html; charset=utf-8", "200 OK", username)
                 TCP.request.sendall(content)
             else:
@@ -166,6 +165,15 @@ def handle(TCP: server.MyTCPHandler, path, data):
         response = TCP.generate_http_response(json.dumps(list(history)).encode(), 'application/json; charset=utf-8', '200 OK')
 
         return TCP.request.sendall(response)
+
+    elif path == b'/loggedUsers':
+        online_users = onlineUsers()
+        print("These are all of the online users so far: ", online_users)
+
+        response = TCP.generate_http_response(json.dumps(online_users).encode(), 'application/json; charset=utf-8', '200 OK')
+
+        return TCP.request.sendall(response)
+         
 
     elif path == b'/users':
         # GET /users
