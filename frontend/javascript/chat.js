@@ -291,10 +291,6 @@ function getUserList() {
 }
 
 function addUser(message) {
-    if(message['username'] === username) {
-        return;
-    }
-
     const userList = document.getElementById('ul-users');
 
     const button = document.createElement('button');
