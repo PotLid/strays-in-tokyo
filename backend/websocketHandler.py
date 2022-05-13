@@ -80,7 +80,7 @@ def handleWebSocket(TCP: MyTCPHandler, username):
                     client['socket'].request.sendall(webframe)
 
             profile_picture = retrieveProfilePicture(username).decode()
-            MyTCPHandler.websocket_connections.remove({'username':username, 'socket':TCP, 'profile_picture': profile_picture})
+            TCP.websocket_connections.remove({'username':username, 'socket':TCP, 'profile_picture': profile_picture})
             break
 
         i += 1
@@ -217,9 +217,9 @@ def websocket_request(TCP: MyTCPHandler, Headers):
     cookieID = retrieveAuthenticationCookieId(Headers[b'Cookie'])
     username = authenticatedUser(cookieID).decode()
     profile_picture = retrieveProfilePicture(username.encode()).decode()
-    MyTCPHandler.websocket_connections.append({'username': username, 'socket': TCP, 'profile_picture': profile_picture})
+    TCP.websocket_connections.append({'username': username, 'socket': TCP, 'profile_picture': profile_picture})
     print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$", '\n')
-    print(MyTCPHandler.websocket_connections, '\n')
+    print(TCP.websocket_connections, '\n')
 
     json_message = {'messageType':'user_connect','username':username}
 
