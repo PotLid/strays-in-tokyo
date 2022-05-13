@@ -68,7 +68,7 @@ def handleWebSocket(TCP: MyTCPHandler, username, profile_picture):
         opcode = first_int & 15
         if opcode == 8:
             # delete socket connection
-            cookieID = retrieveAuthenticationCookieId(username[b'Cookie'])
+            cookieID = retrieveAuthenticationCookieId(Headers[b'Cookie'])
             username = authenticatedUser(cookieID).decode()
             json_message = {'messageType':'user_disconnect','username':username}
 
@@ -81,7 +81,8 @@ def handleWebSocket(TCP: MyTCPHandler, username, profile_picture):
                         client['socket'].request.sendall(webframe)
                     except:
                         profile_picture = retrieveProfilePicture(username).decode()
-                        TCP.websocket_connections.remove({'username':username, 'socket':TCP, 'profile_picture': profile_picture})
+            
+            TCP.websocket_connections.remove({'username':username, 'socket':TCP, 'profile_picture': profile_picture})
 
             break
 
