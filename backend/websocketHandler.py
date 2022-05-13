@@ -1,5 +1,5 @@
 from server import MyTCPHandler
-from backend.userHandling import retrieveAuthenticationCookieId, authenticatedUser
+from backend.userHandling import retrieveAuthenticationCookieId, authenticatedUser, retrieveProfilePicture
 import random
 import json
 import hashlib
@@ -214,8 +214,8 @@ def websocket_request(TCP: MyTCPHandler, Headers):
     cookieID = retrieveAuthenticationCookieId(Headers[b'Cookie'])
     username = authenticatedUser(cookieID).decode()
     TCP.websocket_connections.append({'username': username, 'socket': TCP})
-
-    json_message = {'messageType':'user_connect','username':username}
+    profile_picture = retrieveProfilePicture(username.encode())
+    json_message = {'messageType':'user_connect','username':username, 'profile_picture': profile_picture}
 
     message_as_bytes = json.dumps(json_message).encode()
     webframe = convert_webframe(TCP, message_as_bytes)

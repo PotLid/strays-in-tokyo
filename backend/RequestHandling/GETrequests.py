@@ -17,22 +17,21 @@ The inputted data will be:
     '''
 
 def handle(TCP: server.MyTCPHandler, path, data):
-    print("This is the GET request path: ", path, '\n')
-    print('This is the GET request data: ', data, '\n')
+    
     # Route for the homepage, AKA the homepage.html
     if path == b'/':
         content = render_content("frontend/templates/homepage.html")
         content = server.MyTCPHandler.generate_http_response(TCP, content.encode(), "text/html; charset=utf-8", "200 OK")
         TCP.request.sendall(content)
 
-    elif b'.jpg' in path:
+    elif b'.jpg' in path or b'.jpeg' in path:
         path = path[1:].decode()
         Exist = os.path.exists(path)
         if Exist:
             openJPG = open(path, "rb")
             readJPG = openJPG.read()
             JPGbyteSize = os.path.getsize(path)
-            JPGresponse = 'HTTP/1.1 200 OK\r\nContent-Type: image/png; charset=utf-8\r\nX-Content-Type-Options: nosniff\r\nContent-Length: ' + str(JPGbyteSize) + '\r\n\r\n'
+            JPGresponse = 'HTTP/1.1 200 OK\r\nContent-Type: image/jpeg; charset=utf-8\r\nX-Content-Type-Options: nosniff\r\nContent-Length: ' + str(JPGbyteSize) + '\r\n\r\n'
             JPGresponse = JPGresponse.encode()
             JPGresponse += readJPG
             TCP.request.sendall(JPGresponse)
@@ -48,6 +47,19 @@ def handle(TCP: server.MyTCPHandler, path, data):
             PNGresponse = PNGresponse.encode()
             PNGresponse += readPNG
             TCP.request.sendall(PNGresponse)
+
+    elif b'.gif' in path:
+        path = path[1:].decode()
+        Exist = os.path.exists(path)
+        if Exist:
+            openGIF = open(path, "rb")
+            readGIF = openGIF.read()
+            GIFbyteSize = os.path.getsize(path)
+            GIFresponse = 'HTTP/1.1 200 OK\r\nContent-Type: image/gif; charset=utf-8\r\nX-Content-Type-Options: nosniff\r\nContent-Length: ' + str(GIFbyteSize) + '\r\n\r\n'
+            GIFresponse = GIFresponse.encode()
+            GIFresponse += readGIF
+            TCP.request.sendall(GIFresponse)
+
 
     elif b'.css' in path:
         path = path[1:].decode()
