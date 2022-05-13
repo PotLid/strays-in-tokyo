@@ -41,7 +41,8 @@ function sendMessage() {
     chatBox.value = "";
     chatBox.focus();
 
-    const payload = {'sender': username, 'messageType': 'user_to_server', 'id': id  ,'comment': comment, 'xsrf': xsrf.value}
+    // const payload = {'sender': username, 'messageType': 'user_to_server', 'id': id  ,'comment': comment, 'xsrf': xsrf.value}
+    const payload = {'sender': username, 'messageType': 'user_to_server', 'id': id  ,'comment': comment}
 
     if (comment !== "") {
         socket.send(JSON.stringify(payload));
@@ -58,7 +59,8 @@ function sendLike(e) {
 
     const targetId = e.target.parentNode.parentNode.getAttribute('id-chat');
 
-    const payload = {'messageType': 'like', 'id': targetId, 'xsrf': xsrf.value};
+    // const payload = {'messageType': 'like', 'id': targetId, 'xsrf': xsrf.value};
+    const payload = {'messageType': 'like', 'id': targetId};
 
     // console.log(payload)
 
@@ -138,7 +140,8 @@ function sendDirectMsg(el) {
     const input = document.getElementById('dm-input');
     const xsrf = document.getElementById('id-xsrf');
 
-    const payload = {'sender': username, 'receiver': targetUser, 'messageType': 'dm', 'comment': input.value, 'totalLike': 0, 'id': `DM-${new Date().toUTCString()}`, 'xsrf': xsrf.value }
+    // const payload = {'sender': username, 'receiver': targetUser, 'messageType': 'dm', 'comment': input.value, 'totalLike': 0, 'id': `DM-${new Date().toUTCString()}`, 'xsrf': xsrf.value }
+    const payload = {'sender': username, 'receiver': targetUser, 'messageType': 'dm', 'comment': input.value, 'totalLike': 0, 'id': `DM-${new Date().toUTCString()}` }
 
     // console.log(payload)
 
@@ -165,7 +168,8 @@ function replyDirectMsg(message) {
     const input = document.getElementById('dm-input');
     const xsrf = document.getElementById('id-xsrf');
 
-    const payload = {'sender': message['receiver'], 'receiver': message['sender'], 'messageType': 'dm', 'comment': input.value, 'totalLike': 0, 'id': `DM-${new Date().toUTCString()}`, 'xsrf': xsrf.value }
+    // const payload = {'sender': message['receiver'], 'receiver': message['sender'], 'messageType': 'dm', 'comment': input.value, 'totalLike': 0, 'id': `DM-${new Date().toUTCString()}`, 'xsrf': xsrf.value }
+    const payload = {'sender': message['receiver'], 'receiver': message['sender'], 'messageType': 'dm', 'comment': input.value, 'totalLike': 0, 'id': `DM-${new Date().toUTCString()}`}
 
     socket.send(JSON.stringify(payload));
 
