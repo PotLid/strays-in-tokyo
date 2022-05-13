@@ -85,7 +85,7 @@ def parse(TCP, path, body):
     if path == b'/register':
         handleRegistration(TCP, email, password, confirm_password)
     if path == b'/settings':
-        valid = authenticateXSRF(TCP, body, xsrf_token); print("Line 92 validility:", valid, '\n')
+        valid = authenticateXSRF(TCP, body, xsrf_token)
         if valid:
             handleProfilePicture(TCP, body, profile_picture_filename.encode(), profile_picture_data)
         if valid == False:

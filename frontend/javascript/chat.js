@@ -285,7 +285,7 @@ function addUser(message) {
     button.addEventListener('click', e => directMsg(e.target));
 
     const img = document.createElement('img');
-    img.src = ''
+    img.src = `/frontend/static/${message['profile_picture']}`
     img.id = 'kitty'
 
     button.appendChild(img)
