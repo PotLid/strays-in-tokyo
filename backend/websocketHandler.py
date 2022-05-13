@@ -249,7 +249,7 @@ def websocket_request(TCP: MyTCPHandler, Headers):
             except:
                 TCP.websocket_connections.remove({'username':username, 'socket':TCP, 'profile_picture': profile_picture})
 
-    handleWebSocket(TCP, username)
+    handleWebSocket(TCP, username, profile_picture)
 
 
 def compute_accept(key: str):
