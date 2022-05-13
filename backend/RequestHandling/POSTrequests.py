@@ -17,7 +17,7 @@ The inputted data will be:
 users_id_collection = {}
 
 def handle(TCP, path, data):
-    print("This is the data in line 20 of POST handling: ", data, '\n')
+    
     # POST /users
 
     #This is where we will authenticate the users
@@ -43,7 +43,7 @@ def handle(TCP, path, data):
         return TCP.request.sendall(RedirectResponse.encode())
 
     if path == b'/chatpage':
-        print("This is the data that was submitted in the chatapp: ", data)
+        
         # Handle XSRF authentication
         validate_xsrf_token = backend.userHandling.parse(TCP, path, data)
         # If the xsrf_token doesn't match anything the database, we return a 403 Forbidden
