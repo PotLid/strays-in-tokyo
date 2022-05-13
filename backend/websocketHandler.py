@@ -55,7 +55,7 @@ import base64
     and sends to the payload (message) to other active clients.
 '''
 
-def handleWebSocket(TCP: MyTCPHandler, username):
+def handleWebSocket(TCP: MyTCPHandler, username, profile_picture):
 
     data = b''
 
