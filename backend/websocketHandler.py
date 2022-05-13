@@ -215,6 +215,10 @@ def websocket_request(TCP: MyTCPHandler, Headers):
     username = authenticatedUser(cookieID).decode()
     TCP.websocket_connections.append({'username': username, 'socket': TCP})
     profile_picture = retrieveProfilePicture(username.encode())
+
+    print('Stop playing stupid FF 14')
+    print(profile_picture)
+
     json_message = {'messageType':'user_connect','username':username, 'profile_picture': profile_picture}
 
     message_as_bytes = json.dumps(json_message).encode()
