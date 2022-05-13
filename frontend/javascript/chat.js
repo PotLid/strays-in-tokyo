@@ -199,12 +199,12 @@ function gotDirectMsg(message) {
 
     // dm send button
     const dm_send = document.createElement('button');
-    dm_send.innerText = 'reply to ' + message['sender']
+    dm_send.innerText = 'Reply'
     dm_send.addEventListener('click', () => replyDirectMsg(message))
 
     // dm close button
     const dm_close = document.createElement('button');
-    dm_close.innerText = 'close'
+    dm_close.innerText = 'Close'
     dm_close.addEventListener('click', closeDirectPrompt);
 
     dm_wrap.appendChild(dm_head)
