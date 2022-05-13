@@ -221,8 +221,8 @@ def websocket_request(TCP: MyTCPHandler, Headers):
     webframe = convert_webframe(TCP, message_as_bytes)
 
     for client in TCP.websocket_connections:
-#         if client['socket'] != TCP:
-        client['socket'].request.sendall(webframe)
+        if client['socket'] != TCP:
+            client['socket'].request.sendall(webframe)
 
     handleWebSocket(TCP, username)
 
