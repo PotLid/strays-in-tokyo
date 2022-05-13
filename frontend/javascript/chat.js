@@ -257,6 +257,8 @@ function addMessage(chatMessage) {
     chat.appendChild(chatNode)
     //
     // chat.innerHTML += "<b>" + chatMessage['username'] + "</b>: " + chatMessage["comment"] + "<br/>";
+    // Auto scroll to the bottom
+    chat.scrollTop = chat.scrollHeight;
 }
 
 // // called when the page loads to get the chat_history
