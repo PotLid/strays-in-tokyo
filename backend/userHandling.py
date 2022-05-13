@@ -321,5 +321,5 @@ def onlineUsers():
     for dictionary in final_list:
         if dictionary not in list_to_return:
             list_to_return.append(dictionary)
-
+    print("This is the list to return in line 324: ", list_to_return)
     return list_to_return

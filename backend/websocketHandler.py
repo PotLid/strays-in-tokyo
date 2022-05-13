@@ -83,7 +83,7 @@ def handleWebSocket(TCP: MyTCPHandler, username, profile_picture):
                         profile_picture = retrieveProfilePicture(username).decode()
 
             TCP.websocket_connections.remove({'username':username, 'socket':TCP, 'profile_picture': profile_picture})
-            MyTCPHandler.loggedUsersCollection.delete_one({'username'})
+            MyTCPHandler.loggedUsersCollection.delete_one({'username':username})
 
             break
 
