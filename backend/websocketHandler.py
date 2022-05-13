@@ -68,8 +68,8 @@ def handleWebSocket(TCP: MyTCPHandler, username, profile_picture):
         opcode = first_int & 15
         if opcode == 8:
             # delete socket connection
-            cookieID = retrieveAuthenticationCookieId(Headers[b'Cookie'])
-            username = authenticatedUser(cookieID).decode()
+#             cookieID = retrieveAuthenticationCookieId(username)
+#             username = authenticatedUser(cookieID).decode()
             json_message = {'messageType':'user_disconnect','username':username}
 
             message_as_bytes = json.dumps(json_message).encode()
@@ -158,10 +158,8 @@ def handleWebSocket(TCP: MyTCPHandler, username, profile_picture):
             webframe = convert_webframe(TCP, message_as_bytes)
 
             for client in TCP.websocket_connections:
-                try:
-                    client['socket'].request.sendall(webframe)
-                except:
-                    TCP.websocket_connections.remove({'username':username, 'socket':TCP, 'profile_picture': profile_picture})
+                client['socket'].request.sendall(webframe)
+
 
         elif payload_as_json['messageType'] == 'like':
             timeID = payload_as_json['id']
@@ -175,10 +173,8 @@ def handleWebSocket(TCP: MyTCPHandler, username, profile_picture):
             webframe = convert_webframe(TCP, message_as_bytes)
 
             for client in TCP.websocket_connections:
-                try:
-                    client['socket'].request.sendall(webframe)
-                except:
-                    TCP.websocket_connections.remove({'username':username, 'socket':TCP, 'profile_picture': profile_picture})
+                client['socket'].request.sendall(webframe)
+
 
         elif payload_as_json['messageType'] == 'dislike':
             timeID = payload_as_json['id']
@@ -192,10 +188,8 @@ def handleWebSocket(TCP: MyTCPHandler, username, profile_picture):
             webframe = convert_webframe(TCP, message_as_bytes)
 
             for client in TCP.websocket_connections:
-                try:
-                    client['socket'].request.sendall(webframe)
-                except:
-                    TCP.websocket_connections.remove({'username':username, 'socket':TCP, 'profile_picture': profile_picture})
+                client['socket'].request.sendall(webframe)
+
 
         elif payload_as_json['messageType'] == 'dm':
             timeID = payload_as_json['id']
@@ -213,11 +207,8 @@ def handleWebSocket(TCP: MyTCPHandler, username, profile_picture):
             for client in TCP.websocket_connections:
 #                 if client['username'] == sender or client['username'] == receiver:
                 if client['username'] == receiver:
-                    try:
-                        client['socket'].request.sendall(webframe)
-                    except:
-                        TCP.websocket_connections.remove({'username':username, 'socket':TCP, 'profile_picture': profile_picture})
-
+                    client['socket'].request.sendall(webframe)
+                    
         data = b''
 
     return
