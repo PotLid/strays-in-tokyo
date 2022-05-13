@@ -77,10 +77,12 @@ def handleWebSocket(TCP: MyTCPHandler, username):
 
             for client in TCP.websocket_connections:
                 if client['socket'] != TCP:
-                    client['socket'].request.sendall(webframe)
-
-            profile_picture = retrieveProfilePicture(username).decode()
-            TCP.websocket_connections.remove({'username':username, 'socket':TCP, 'profile_picture': profile_picture})
+                    try:
+                        client['socket'].request.sendall(webframe)
+                    except:
+                        profile_picture = retrieveProfilePicture(username).decode()
+                        TCP.websocket_connections.remove({'username':username, 'socket':TCP, 'profile_picture': profile_picture})
+                        
             break
 
         i += 1
@@ -155,7 +157,10 @@ def handleWebSocket(TCP: MyTCPHandler, username):
             webframe = convert_webframe(TCP, message_as_bytes)
 
             for client in TCP.websocket_connections:
-                client['socket'].request.sendall(webframe)
+                try:
+                    client['socket'].request.sendall(webframe)
+                except:
+                    TCP.websocket_connections.remove({'username':username, 'socket':TCP, 'profile_picture': profile_picture})
 
         elif payload_as_json['messageType'] == 'like':
             timeID = payload_as_json['id']
@@ -169,7 +174,11 @@ def handleWebSocket(TCP: MyTCPHandler, username):
             webframe = convert_webframe(TCP, message_as_bytes)
 
             for client in TCP.websocket_connections:
-                client['socket'].request.sendall(webframe)
+                try:
+                    client['socket'].request.sendall(webframe)
+                except:
+                    TCP.websocket_connections.remove({'username':username, 'socket':TCP, 'profile_picture': profile_picture})
+                
         elif payload_as_json['messageType'] == 'dislike':
             timeID = payload_as_json['id']
             # updates postInfo DB element with decremented like count
@@ -182,7 +191,11 @@ def handleWebSocket(TCP: MyTCPHandler, username):
             webframe = convert_webframe(TCP, message_as_bytes)
 
             for client in TCP.websocket_connections:
-                client['socket'].request.sendall(webframe)
+                try:
+                    client['socket'].request.sendall(webframe)
+                except:
+                    TCP.websocket_connections.remove({'username':username, 'socket':TCP, 'profile_picture': profile_picture})client['socket'].request.sendall(webframe)
+                
         elif payload_as_json['messageType'] == 'dm':
             timeID = payload_as_json['id']
             sender = payload_as_json['sender']
@@ -199,7 +212,10 @@ def handleWebSocket(TCP: MyTCPHandler, username):
             for client in TCP.websocket_connections:
 #                 if client['username'] == sender or client['username'] == receiver:
                 if client['username'] == receiver:
-                    client['socket'].request.sendall(webframe)
+                    try:
+                        client['socket'].request.sendall(webframe)
+                    except:
+                        TCP.websocket_connections.remove({'username':username, 'socket':TCP, 'profile_picture': profile_picture})
 
         data = b''
 
@@ -221,14 +237,17 @@ def websocket_request(TCP: MyTCPHandler, Headers):
     print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$", '\n')
     print(TCP.websocket_connections, '\n')
 
-    json_message = {'messageType':'user_connect','username':username}
+    json_message = {'messageType':'user_connect','username':username, 'profile_picture': profile_picture}
 
     message_as_bytes = json.dumps(json_message).encode()
     webframe = convert_webframe(TCP, message_as_bytes)
 
     for client in TCP.websocket_connections:
         if client['socket'] != TCP:
-            client['socket'].request.sendall(webframe)
+            try:
+                client['socket'].request.sendall(webframe)
+            except:
+                TCP.websocket_connections.remove({'username':username, 'socket':TCP, 'profile_picture': profile_picture})
 
     handleWebSocket(TCP, username)
 
